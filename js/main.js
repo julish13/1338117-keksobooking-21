@@ -39,7 +39,6 @@ const capacityInput = adForm.querySelector(`select[name=capacity]`);
 const filtersForm = document.querySelector(`.map__filters`);
 
 
-
 //  Вспомогательные функции
 
 let getRandomInt = function (min, max) {
@@ -222,7 +221,7 @@ let getAddressFromPinPosition = function (xFromUpLeft = pinMainWidth / 2, yFromU
 
 //  Поле адреса в неактивном состоянии
 
-addressInput.value = getAddressFromPinPosition (undefined, pinMainHeight / 2);
+addressInput.value = getAddressFromPinPosition(undefined, pinMainHeight / 2);
 
 
 //  Смена режима страницы
@@ -233,7 +232,7 @@ let getActive = function () {
 
   changeAbility(adForm, true);
   changeAbility(filtersForm, true);
-  addressInput.value = getAddressFromPinPosition (undefined, pinMainHeight + PIN_TAIL);
+  addressInput.value = getAddressFromPinPosition(undefined, pinMainHeight + PIN_TAIL);
   typeInput.addEventListener(`change`, matchPriceMinToType);
   timeInInput.addEventListener(`change`, matchTimesIn);
   timeOutInput.addEventListener(`change`, matchTimesOut);
@@ -244,9 +243,7 @@ let getActive = function () {
 
 };
 
-pinMain.addEventListener(`mousedown`, function (evt) {
-  getActive();
-});
+pinMain.addEventListener(`mousedown`, getActive);
 
 pinMain.addEventListener(`keydown`, function (evt) {
   if (evt.key === `Enter`) {
@@ -261,7 +258,7 @@ const PriceMinToType = {
   flat: 1000,
   house: 5000,
   palace: 10000
-}
+};
 
 let matchPriceMinToType = function () {
   priceInput.min = priceInput.placeholder = PriceMinToType[typeInput.value];
@@ -291,9 +288,9 @@ let validateTitle = function () {
 
 
 let validatePrice = function () {
-  if (+ priceInput.value < priceInput.min) {
+  if (+priceInput.value < priceInput.min) {
     priceInput.setCustomValidity(`Цена слишком маленькая`);
-  } else if (+ priceInput.value > priceInput.max) {
+  } else if (+priceInput.value > priceInput.max) {
     priceInput.setCustomValidity(`Цена слишком большая`);
   } else {
     priceInput.setCustomValidity(``);
@@ -304,10 +301,10 @@ let validatePrice = function () {
 
 
 let matchRoomsAndCapacity = function () {
-  if (capacityInput.value == 0 && roomsInput.value != 100 || capacityInput.value != 0 && roomsInput.value == 100) {
+  if (+capacityInput.value === 0 && +roomsInput.value !== 100 || +capacityInput.value !== 0 && +roomsInput.value === 100) {
     roomsInput.setCustomValidity(`Неподходящее значение`);
     capacityInput.setCustomValidity(`Неподходящее значение`);
-  } else if (+ capacityInput.value > roomsInput.value) {
+  } else if (+capacityInput.value > roomsInput.value) {
     roomsInput.setCustomValidity(`Неподходящее значение`);
     capacityInput.setCustomValidity(`Неподходящее значение`);
   } else {
@@ -317,5 +314,5 @@ let matchRoomsAndCapacity = function () {
 
   roomsInput.reportValidity();
   capacityInput.reportValidity();
-}
+};
 
