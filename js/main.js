@@ -12,6 +12,7 @@ const HOUSING_FEATURES_DATA = [`wifi`, `dishwasher`, `parking`, `washer`, `eleva
 const HOUSING_PHOTOS_DATA = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
 const MAP_Y = 130;
 const MAP_HEIGHT = 630;
+const PIN_TAIL = 22;
 
 
 const map = document.querySelector(`.map`);
@@ -38,23 +39,6 @@ const capacityInput = adForm.querySelector(`select[name=capacity]`);
 const filtersForm = document.querySelector(`.map__filters`);
 
 
-//  Блокировка интерактивных элементов форм в неактивном состоянии
-
-let changeAbility = function (form, ability) {
-  const fieldsets = form.querySelectorAll(`fieldset`);
-
-  for (let fieldset of fieldsets) {
-    fieldset.disabled = !ability;
-  }
-};
-
-changeAbility(adForm, false);
-changeAbility(filtersForm, false);
-
-
-//  Поле адреса в неактивном состоянии
-
-addressInput.value = `${parseInt(parseInt(pinMain.style.left, 10) + pinMainWidth / 2, 10)}, ${parseInt(parseInt(pinMain.style.top, 10) + pinMainHeight / 2, 10)}`;
 
 //  Вспомогательные функции
 
@@ -212,6 +196,34 @@ let renderCard = function (data) {
 
 renderCard(announcements[0]);
 
+//  Блокировка интерактивных элементов форм в неактивном состоянии
+
+let changeAbility = function (form, ability) {
+  const fieldsets = form.querySelectorAll(`fieldset`);
+  const selects = form.querySelectorAll(`select`);
+
+  for (let fieldset of fieldsets) {
+    fieldset.disabled = !ability;
+  }
+
+  for (let select of selects) {
+    select.disabled = !ability;
+  }
+};
+
+changeAbility(adForm, false);
+changeAbility(filtersForm, false);
+
+//  Функция для поля адреса
+let getAddressFromPinPosition = function (xFromUpLeft = pinMainWidth / 2, yFromUpLeft) {
+  return `${parseInt(parseInt(pinMain.style.left, 10) + xFromUpLeft, 10)}, ${parseInt(parseInt(pinMain.style.top, 10) + yFromUpLeft, 10)}`;
+};
+
+
+//  Поле адреса в неактивном состоянии
+
+addressInput.value = getAddressFromPinPosition (undefined, pinMainHeight / 2);
+
 
 //  Смена режима страницы
 
@@ -221,18 +233,19 @@ let getActive = function () {
 
   changeAbility(adForm, true);
   changeAbility(filtersForm, true);
-  addressInput.value = `${parseInt(parseInt(pinMain.style.left, 10) + pinMainWidth / 2, 10)}, ${parseInt(parseInt(pinMain.style.top, 10) + pinMainHeight, 10)}`;
+  addressInput.value = getAddressFromPinPosition (undefined, pinMainHeight + PIN_TAIL);
   typeInput.addEventListener(`change`, matchPriceMinToType);
   timeInInput.addEventListener(`change`, matchTimesIn);
   timeOutInput.addEventListener(`change`, matchTimesOut);
-  titleInput.addEventListener(`invalid`, validateTitle);
-  priceInput.addEventListener(`invalid`, validatePrice);
+  titleInput.addEventListener(`input`, validateTitle);
+  priceInput.addEventListener(`input`, validatePrice);
+  roomsInput.addEventListener(`input`, matchRoomsAndCapacity);
+  capacityInput.addEventListener(`input`, matchRoomsAndCapacity);
+
 };
 
 pinMain.addEventListener(`mousedown`, function (evt) {
-  if (evt.which === 1) {
-    getActive();
-  }
+  getActive();
 });
 
 pinMain.addEventListener(`keydown`, function (evt) {
@@ -242,26 +255,16 @@ pinMain.addEventListener(`keydown`, function (evt) {
 });
 
 //  Валидация формы
+
+const PriceMinToType = {
+  bungalow: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000
+}
+
 let matchPriceMinToType = function () {
-  switch (typeInput.value) {
-    case `bungalow`:
-      priceInput.min = 0;
-      break;
-
-    case `flat`:
-      priceInput.min = 1000;
-      break;
-
-    case `house`:
-      priceInput.min = 5000;
-      break;
-
-    case `palace`:
-      priceInput.min = 10000;
-      break;
-  }
-
-  priceInput.placeholder = String(priceInput.min);
+  priceInput.min = priceInput.placeholder = PriceMinToType[typeInput.value];
 };
 
 
@@ -275,96 +278,44 @@ let matchTimesIn = function () {
 
 
 let validateTitle = function () {
-  if (titleInput.validity.tooShort) {
-    titleInput.setCustomValidity(`Заголовок должен состоять минимум из 30 символов`);
-  } else if (titleInput.validity.tooLong) {
-    titleInput.setCustomValidity(`Заголовок не должен превышать 100 символов`);
-  } else if (titleInput.validity.valueMissing) {
-    titleInput.setCustomValidity(`Обязательное поле`);
+  if (titleInput.value.length < titleInput.minLength) {
+    titleInput.setCustomValidity(`Заголовок должен состоять минимум из ${titleInput.minLength} символов`);
+  } else if (titleInput.value.length > titleInput.maxLength) {
+    titleInput.setCustomValidity(`Заголовок не должен превышать ${titleInput.maxLength} символов`);
   } else {
     titleInput.setCustomValidity(``);
   }
+
+  titleInput.reportValidity();
 };
 
 
 let validatePrice = function () {
-  if (priceInput.validity.rangeOverflow) {
-    priceInput.setCustomValidity(`Цена слишком большая`);
-  } else if (priceInput.validity.rangeUnderflow) {
+  if (+ priceInput.value < priceInput.min) {
     priceInput.setCustomValidity(`Цена слишком маленькая`);
+  } else if (+ priceInput.value > priceInput.max) {
+    priceInput.setCustomValidity(`Цена слишком большая`);
   } else {
-    titleInput.setCustomValidity(``);
+    priceInput.setCustomValidity(``);
   }
+
+  priceInput.reportValidity();
 };
-
-
-let capacityOptions = capacityInput.querySelectorAll(`option`);
-
-// let matchRoomsAndCapacity = function () {
-//   if (roomsInput.value === `1`) {
-//     for (let capacityOption of capacityOptions) {
-//       if (capacityOption.value !== `1`) {
-//        capacityOption.remove();
-//       };
-//     };
-//   } else if (roomsInput.value === `2`) {
-//     for (let capacityOption of capacityOptions) {
-//       if (capacityOption.value !== `1` && capacityOption.value !== `2`) {
-//        capacityOption.remove();
-//       };
-//     };
-//   } else if (roomsInput.value === `3`) {
-//     for (let capacityOption of capacityOptions) {
-//       if (capacityOption.value !== `1` && capacityOption.value !== `2` && capacityOption.value !== `3`) {
-//        capacityOption.remove();
-//       };
-//     };
-//   } else if (roomsInput.value === `100`) {
-//     for (let capacityOption of capacityOptions) {
-//       if (capacityOption.value !== `0`) {
-//        capacityOption.remove();
-//       };
-//     };
-//   };
-// };
 
 
 let matchRoomsAndCapacity = function () {
-
-  switch (roomsInput.value) {
-    case `1`:
-      for (let capacityOption of capacityOptions) {
-        if (capacityOption.value !== 1) {
-          capacityOption.remove();
-        }
-      }
-      break;
-
-    case `2`:
-      for (let capacityOption of capacityOptions) {
-        if (capacityOption.value !== `1` && capacityOption.value !== `2`) {
-          capacityOption.remove();
-        }
-      }
-      break;
-
-    case `3`:
-      for (let capacityOption of capacityOptions) {
-        if (capacityOption.value !== `1` && capacityOption.value !== `2` && capacityOption.value !== `3`) {
-          capacityOption.remove();
-        }
-      }
-      break;
-
-    case `100`:
-      for (let capacityOption of capacityOptions) {
-        if (capacityOption.value !== `0`) {
-          capacityOption.remove();
-        }
-      }
-      break;
+  if (capacityInput.value == 0 && roomsInput.value != 100 || capacityInput.value != 0 && roomsInput.value == 100) {
+    roomsInput.setCustomValidity(`Неподходящее значение`);
+    capacityInput.setCustomValidity(`Неподходящее значение`);
+  } else if (+ capacityInput.value > roomsInput.value) {
+    roomsInput.setCustomValidity(`Неподходящее значение`);
+    capacityInput.setCustomValidity(`Неподходящее значение`);
+  } else {
+    roomsInput.setCustomValidity(``);
+    capacityInput.setCustomValidity(``);
   }
-};
 
-roomsInput.addEventListener(`change`, matchRoomsAndCapacity);
+  roomsInput.reportValidity();
+  capacityInput.reportValidity();
+}
 
