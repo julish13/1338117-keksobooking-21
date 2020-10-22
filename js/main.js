@@ -12,9 +12,10 @@ const HOUSING_FEATURES_DATA = [`wifi`, `dishwasher`, `parking`, `washer`, `eleva
 const HOUSING_PHOTOS_DATA = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
 const MAP_Y = 130;
 const MAP_HEIGHT = 630;
+const PIN_TAIL = 22;
+
 
 const map = document.querySelector(`.map`);
-map.classList.remove(`map--faded`);
 const mapWidth = map.offsetWidth;
 const pin = document.querySelector(`.map__pin`);
 const pinWidth = pin.offsetWidth;
@@ -23,6 +24,19 @@ const pinsList = document.querySelector(`.map__pins`);
 const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
 const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
 const mapFiltersContainer = document.querySelector(`.map__filters-container`);
+const pinMain = document.querySelector(`.map__pin--main`);
+const pinMainWidth = pinMain.offsetWidth;
+const pinMainHeight = pinMain.offsetHeight;
+const adForm = document.querySelector(`.ad-form`);
+const addressInput = adForm.querySelector(`input[name=address]`);
+const titleInput = adForm.querySelector(`input[name=title]`);
+const priceInput = adForm.querySelector(`input[name=price]`);
+const typeInput = adForm.querySelector(`select[name=type]`);
+const timeInInput = adForm.querySelector(`select[name=timein]`);
+const timeOutInput = adForm.querySelector(`select[name=timeout]`);
+const roomsInput = adForm.querySelector(`select[name=rooms]`);
+const capacityInput = adForm.querySelector(`select[name=capacity]`);
+const filtersForm = document.querySelector(`.map__filters`);
 
 
 //  Вспомогательные функции
@@ -76,6 +90,7 @@ let createAnnouncement = function (index) {
   return announcement;
 };
 
+
 //  Создание массива с объявлениями
 
 let createAnnouncementsArrow = function () {
@@ -89,9 +104,11 @@ let createAnnouncementsArrow = function () {
   return announcements;
 };
 
+
 //  Создание массива со случайными данными
 
 const announcements = createAnnouncementsArrow();
+
 
 //  Функция создания DOM-элемента Pin на основе JS-объекта
 
@@ -103,6 +120,7 @@ let createPin = function (data) {
   image.alt = data.offer.title;
   return pinBox;
 };
+
 
 //  Создание и добавление фрагмента Pin в DOM
 
@@ -117,6 +135,7 @@ let renderPins = function (data) {
 };
 
 renderPins(announcements);
+
 
 //  Функция создания DOM-элемента Card на основе JS-объекта
 
@@ -160,9 +179,9 @@ let createCard = function (data) {
     cardPhotosChildren[i].src = data.offer.photos[i];
   }
 
-
   return cardBox;
 };
+
 
 //  Создание и добавление фрагмента Card в DOM
 
@@ -176,4 +195,124 @@ let renderCard = function (data) {
 
 renderCard(announcements[0]);
 
+//  Блокировка интерактивных элементов форм в неактивном состоянии
+
+let changeAbility = function (form, ability) {
+  const fieldsets = form.querySelectorAll(`fieldset`);
+  const selects = form.querySelectorAll(`select`);
+
+  for (let fieldset of fieldsets) {
+    fieldset.disabled = !ability;
+  }
+
+  for (let select of selects) {
+    select.disabled = !ability;
+  }
+};
+
+changeAbility(adForm, false);
+changeAbility(filtersForm, false);
+
+//  Функция для поля адреса
+let getAddressFromPinPosition = function (xFromUpLeft = pinMainWidth / 2, yFromUpLeft) {
+  return `${parseInt(parseInt(pinMain.style.left, 10) + xFromUpLeft, 10)}, ${parseInt(parseInt(pinMain.style.top, 10) + yFromUpLeft, 10)}`;
+};
+
+
+//  Поле адреса в неактивном состоянии
+
+addressInput.value = getAddressFromPinPosition(undefined, pinMainHeight / 2);
+
+
+//  Смена режима страницы
+
+let getActive = function () {
+  map.classList.remove(`map--faded`);
+  adForm.classList.remove(`ad-form--disabled`);
+
+  changeAbility(adForm, true);
+  changeAbility(filtersForm, true);
+  addressInput.value = getAddressFromPinPosition(undefined, pinMainHeight + PIN_TAIL);
+  typeInput.addEventListener(`change`, matchPriceMinToType);
+  timeInInput.addEventListener(`change`, matchTimesIn);
+  timeOutInput.addEventListener(`change`, matchTimesOut);
+  titleInput.addEventListener(`input`, validateTitle);
+  priceInput.addEventListener(`input`, validatePrice);
+  roomsInput.addEventListener(`input`, matchRoomsAndCapacity);
+  capacityInput.addEventListener(`input`, matchRoomsAndCapacity);
+
+};
+
+pinMain.addEventListener(`mousedown`, getActive);
+
+pinMain.addEventListener(`keydown`, function (evt) {
+  if (evt.key === `Enter`) {
+    getActive();
+  }
+});
+
+//  Валидация формы
+
+const PriceMinToType = {
+  bungalow: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000
+};
+
+let matchPriceMinToType = function () {
+  priceInput.min = priceInput.placeholder = PriceMinToType[typeInput.value];
+};
+
+
+let matchTimesOut = function () {
+  timeInInput.value = timeOutInput.value;
+};
+
+let matchTimesIn = function () {
+  timeOutInput.value = timeInInput.value;
+};
+
+
+let validateTitle = function () {
+  if (titleInput.value.length < titleInput.minLength) {
+    titleInput.setCustomValidity(`Заголовок должен состоять минимум из ${titleInput.minLength} символов`);
+  } else if (titleInput.value.length > titleInput.maxLength) {
+    titleInput.setCustomValidity(`Заголовок не должен превышать ${titleInput.maxLength} символов`);
+  } else {
+    titleInput.setCustomValidity(``);
+  }
+
+  titleInput.reportValidity();
+};
+
+
+let validatePrice = function () {
+  if (+priceInput.value < priceInput.min) {
+    priceInput.setCustomValidity(`Цена слишком маленькая`);
+  } else if (+priceInput.value > priceInput.max) {
+    priceInput.setCustomValidity(`Цена слишком большая`);
+  } else {
+    priceInput.setCustomValidity(``);
+  }
+
+  priceInput.reportValidity();
+};
+
+
+let matchRoomsAndCapacity = function () {
+  if (+capacityInput.value === 0 && +roomsInput.value !== 100 || +capacityInput.value !== 0 && +roomsInput.value === 100) {
+    roomsInput.setCustomValidity(`Неподходящее значение`);
+    capacityInput.setCustomValidity(`Неподходящее значение`);
+  } else if (+capacityInput.value > roomsInput.value) {
+    roomsInput.setCustomValidity(`Неподходящее значение`);
+    capacityInput.setCustomValidity(`Неподходящее значение`);
+  } else {
+    roomsInput.setCustomValidity(``);
+    capacityInput.setCustomValidity(``);
+  }
+
+  roomsInput.reportValidity();
+  capacityInput.reportValidity();
+};
 
