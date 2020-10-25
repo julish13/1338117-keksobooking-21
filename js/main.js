@@ -205,7 +205,7 @@ let onPopupEscPress = function (evt) {
 
 let openPopup = function (evt) {
   for (let i = 0; i < pinsListChildren.length; i++) {
-    if (evt.target.parentNode === pinsListChildren[i]) {
+    if (evt.target.parentNode === pinsListChildren[i] || evt.target === pinsListChildren[i]) {
       renderCard(announcements[i - 1]);
     }
   }
