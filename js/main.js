@@ -193,7 +193,41 @@ let renderCard = function (data) {
   map.insertBefore(fragmentCard, mapFiltersContainer);
 };
 
-renderCard(announcements[0]);
+// Показывать карточку
+
+const pinsListChildren = pinsList.querySelectorAll(`.map__pin`);
+
+let onPopupEscPress = function (evt) {
+  if (evt.key === `Escape`) {
+    closePopup();
+  }
+};
+
+let openPopup = function (evt) {
+  for (let i = 1; i < pinsListChildren.length; i++) {
+    if (evt.target === pinsListChildren[i]) {
+      renderCard(announcements[i - 1]);
+    }
+  }
+
+  document.addEventListener(`keydown`, onPopupEscPress);
+  const popupCloseButton = document.querySelector(`.popup__close`);
+  popupCloseButton.addEventListener(`click`, closePopup);
+};
+
+let closePopup = function () {
+  const cardPopup = map.querySelector(`.map__card`);
+  cardPopup.remove();
+
+  document.removeEventListener(`keydown`, onPopupEscPress);
+  // document.querySelector(`.popup__close`).removeEventListener(`click`, closePopup);
+};
+
+let onPinEnterPress = function (evt) {
+  if (evt.key === `Enter`) {
+    openPopup();
+  }
+};
 
 //  Блокировка интерактивных элементов форм в неактивном состоянии
 
@@ -238,9 +272,10 @@ let getActive = function () {
   timeOutInput.addEventListener(`change`, matchTimesOut);
   titleInput.addEventListener(`input`, validateTitle);
   priceInput.addEventListener(`input`, validatePrice);
-  roomsInput.addEventListener(`input`, matchRoomsAndCapacity);
-  capacityInput.addEventListener(`input`, matchRoomsAndCapacity);
-
+  roomsInput.addEventListener(`input`, validateRoomCapacity);
+  capacityInput.addEventListener(`input`, validateRoomCapacity);
+  pinsList.addEventListener(`click`, openPopup);
+  pinsList.addEventListener(`keydown`, onPinEnterPress);
 };
 
 pinMain.addEventListener(`mousedown`, getActive);
@@ -300,13 +335,16 @@ let validatePrice = function () {
 };
 
 
-let matchRoomsAndCapacity = function () {
-  if (+capacityInput.value === 0 && +roomsInput.value !== 100 || +capacityInput.value !== 0 && +roomsInput.value === 100) {
-    roomsInput.setCustomValidity(`Неподходящее значение`);
-    capacityInput.setCustomValidity(`Неподходящее значение`);
+let validateRoomCapacity = function () {
+  if (+capacityInput.value === 0 && +roomsInput.value !== 100) {
+    roomsInput.setCustomValidity(`Нужно 100 комнат`);
+    capacityInput.setCustomValidity(``);
+  } else if (+capacityInput.value !== 0 && +roomsInput.value === 100) {
+    roomsInput.setCustomValidity(``);
+    capacityInput.setCustomValidity(`Не для гостей`);
   } else if (+capacityInput.value > roomsInput.value) {
-    roomsInput.setCustomValidity(`Неподходящее значение`);
-    capacityInput.setCustomValidity(`Неподходящее значение`);
+    roomsInput.setCustomValidity(`Нужно больше комнат`);
+    capacityInput.setCustomValidity(``);
   } else {
     roomsInput.setCustomValidity(``);
     capacityInput.setCustomValidity(``);
@@ -315,4 +353,3 @@ let matchRoomsAndCapacity = function () {
   roomsInput.reportValidity();
   capacityInput.reportValidity();
 };
-
