@@ -196,6 +196,8 @@ let renderCard = function (data) {
 // Показывать карточку
 
 const pinsListChildren = pinsList.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+const cardPopup = map.querySelector(`.map__card`);
+const popupCloseButton = map.querySelector(`.popup__close`);
 
 let onPopupEscPress = function (evt) {
   if (evt.key === `Escape`) {
@@ -204,23 +206,30 @@ let onPopupEscPress = function (evt) {
 };
 
 let openPopup = function (evt) {
+  if (map.querySelector(`.map__card`)) {
+    map.querySelector(`.map__card`).remove();
+  }
+
   for (let i = 0; i < pinsListChildren.length; i++) {
     if (evt.target.parentNode === pinsListChildren[i] || evt.target === pinsListChildren[i]) {
-      renderCard(announcements[i - 1]);
+      renderCard(announcements[i]);
     }
   }
 
   document.addEventListener(`keydown`, onPopupEscPress);
-  const popupCloseButton = document.querySelector(`.popup__close`);
-  popupCloseButton.addEventListener(`click`, closePopup);
+  if (popupCloseButton) {
+    popupCloseButton.addEventListener(`click`, closePopup);
+  }
 };
 
 let closePopup = function () {
-  const cardPopup = map.querySelector(`.map__card`);
+
   cardPopup.remove();
 
   document.removeEventListener(`keydown`, onPopupEscPress);
-  document.querySelector(`.popup__close`).removeEventListener(`click`, closePopup);
+  if (popupCloseButton) {
+    popupCloseButton.removeEventListener(`click`, closePopup);
+  }
 };
 
 let onPinEnterPress = function (evt) {
