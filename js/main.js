@@ -195,7 +195,7 @@ let renderCard = function (data) {
 
 // Показывать карточку
 
-const pinsListChildren = pinsList.querySelectorAll(`.map__pin`);
+const pinsListChildren = pinsList.querySelectorAll(`.map__pin:not(.map__pin--main)`);
 
 let onPopupEscPress = function (evt) {
   if (evt.key === `Escape`) {
@@ -204,8 +204,8 @@ let onPopupEscPress = function (evt) {
 };
 
 let openPopup = function (evt) {
-  for (let i = 1; i < pinsListChildren.length; i++) {
-    if (evt.target === pinsListChildren[i]) {
+  for (let i = 0; i < pinsListChildren.length; i++) {
+    if (evt.target.parentNode === pinsListChildren[i]) {
       renderCard(announcements[i - 1]);
     }
   }
@@ -220,7 +220,7 @@ let closePopup = function () {
   cardPopup.remove();
 
   document.removeEventListener(`keydown`, onPopupEscPress);
-  // document.querySelector(`.popup__close`).removeEventListener(`click`, closePopup);
+  document.querySelector(`.popup__close`).removeEventListener(`click`, closePopup);
 };
 
 let onPinEnterPress = function (evt) {
@@ -274,8 +274,8 @@ let getActive = function () {
   priceInput.addEventListener(`input`, validatePrice);
   roomsInput.addEventListener(`input`, validateRoomCapacity);
   capacityInput.addEventListener(`input`, validateRoomCapacity);
-  pinsList.addEventListener(`click`, openPopup);
-  pinsList.addEventListener(`keydown`, onPinEnterPress);
+  map.addEventListener(`click`, openPopup);
+  map.addEventListener(`keydown`, onPinEnterPress);
 };
 
 pinMain.addEventListener(`mousedown`, getActive);
