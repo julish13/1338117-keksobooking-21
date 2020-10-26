@@ -185,19 +185,21 @@ let createCard = function (data) {
 
 //  Создание и добавление фрагмента Card в DOM
 
+let cardPopup;
+let popupCloseButton;
+
 let renderCard = function (data) {
   const fragmentCard = document.createDocumentFragment();
-
-  fragmentCard.appendChild(createCard(data));
-
+  cardPopup = createCard(data);
+  fragmentCard.appendChild(cardPopup);
+  popupCloseButton = cardPopup.querySelector(`.popup__close`);
   map.insertBefore(fragmentCard, mapFiltersContainer);
 };
 
 // Показывать карточку
 
 const pinsListChildren = pinsList.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-const cardPopup = map.querySelector(`.map__card`);
-const popupCloseButton = map.querySelector(`.popup__close`);
+
 
 let onPopupEscPress = function (evt) {
   if (evt.key === `Escape`) {
@@ -206,19 +208,19 @@ let onPopupEscPress = function (evt) {
 };
 
 let openPopup = function (evt) {
-  if (map.querySelector(`.map__card`)) {
-    map.querySelector(`.map__card`).remove();
-  }
-
   for (let i = 0; i < pinsListChildren.length; i++) {
-    if (evt.target.parentNode === pinsListChildren[i] || evt.target === pinsListChildren[i]) {
-      renderCard(announcements[i]);
+    const target = evt.target.parentNode === pinsListChildren[i] || evt.target === pinsListChildren[i];
+    if (cardPopup) {
+      if (target) {
+        cardPopup.remove();
+      }
     }
-  }
 
-  document.addEventListener(`keydown`, onPopupEscPress);
-  if (popupCloseButton) {
-    popupCloseButton.addEventListener(`click`, closePopup);
+    if (target) {
+      renderCard(announcements[i]);
+      document.addEventListener(`keydown`, onPopupEscPress);
+      popupCloseButton.addEventListener(`click`, closePopup);
+    }
   }
 };
 
