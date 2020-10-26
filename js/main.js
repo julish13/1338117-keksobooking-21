@@ -185,15 +185,60 @@ let createCard = function (data) {
 
 //  Создание и добавление фрагмента Card в DOM
 
+let cardPopup;
+let popupCloseButton;
+
 let renderCard = function (data) {
   const fragmentCard = document.createDocumentFragment();
-
-  fragmentCard.appendChild(createCard(data));
-
+  cardPopup = createCard(data);
+  fragmentCard.appendChild(cardPopup);
+  popupCloseButton = cardPopup.querySelector(`.popup__close`);
   map.insertBefore(fragmentCard, mapFiltersContainer);
 };
 
-renderCard(announcements[0]);
+// Показывать карточку
+
+const pinsListChildren = pinsList.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+
+
+let onPopupEscPress = function (evt) {
+  if (evt.key === `Escape`) {
+    closePopup();
+  }
+};
+
+let openPopup = function (evt) {
+  for (let i = 0; i < pinsListChildren.length; i++) {
+    const target = evt.target.parentNode === pinsListChildren[i] || evt.target === pinsListChildren[i];
+    if (cardPopup) {
+      if (target) {
+        cardPopup.remove();
+      }
+    }
+
+    if (target) {
+      renderCard(announcements[i]);
+      document.addEventListener(`keydown`, onPopupEscPress);
+      popupCloseButton.addEventListener(`click`, closePopup);
+    }
+  }
+};
+
+let closePopup = function () {
+
+  cardPopup.remove();
+
+  document.removeEventListener(`keydown`, onPopupEscPress);
+  if (popupCloseButton) {
+    popupCloseButton.removeEventListener(`click`, closePopup);
+  }
+};
+
+let onPinEnterPress = function (evt) {
+  if (evt.key === `Enter`) {
+    openPopup();
+  }
+};
 
 //  Блокировка интерактивных элементов форм в неактивном состоянии
 
@@ -238,9 +283,10 @@ let getActive = function () {
   timeOutInput.addEventListener(`change`, matchTimesOut);
   titleInput.addEventListener(`input`, validateTitle);
   priceInput.addEventListener(`input`, validatePrice);
-  roomsInput.addEventListener(`input`, matchRoomsAndCapacity);
-  capacityInput.addEventListener(`input`, matchRoomsAndCapacity);
-
+  roomsInput.addEventListener(`input`, validateRoomCapacity);
+  capacityInput.addEventListener(`input`, validateRoomCapacity);
+  map.addEventListener(`click`, openPopup);
+  map.addEventListener(`keydown`, onPinEnterPress);
 };
 
 pinMain.addEventListener(`mousedown`, getActive);
@@ -300,13 +346,16 @@ let validatePrice = function () {
 };
 
 
-let matchRoomsAndCapacity = function () {
-  if (+capacityInput.value === 0 && +roomsInput.value !== 100 || +capacityInput.value !== 0 && +roomsInput.value === 100) {
-    roomsInput.setCustomValidity(`Неподходящее значение`);
-    capacityInput.setCustomValidity(`Неподходящее значение`);
+let validateRoomCapacity = function () {
+  if (+capacityInput.value === 0 && +roomsInput.value !== 100) {
+    roomsInput.setCustomValidity(`Нужно 100 комнат`);
+    capacityInput.setCustomValidity(``);
+  } else if (+capacityInput.value !== 0 && +roomsInput.value === 100) {
+    roomsInput.setCustomValidity(``);
+    capacityInput.setCustomValidity(`Не для гостей`);
   } else if (+capacityInput.value > roomsInput.value) {
-    roomsInput.setCustomValidity(`Неподходящее значение`);
-    capacityInput.setCustomValidity(`Неподходящее значение`);
+    roomsInput.setCustomValidity(`Нужно больше комнат`);
+    capacityInput.setCustomValidity(``);
   } else {
     roomsInput.setCustomValidity(``);
     capacityInput.setCustomValidity(``);
@@ -315,4 +364,3 @@ let matchRoomsAndCapacity = function () {
   roomsInput.reportValidity();
   capacityInput.reportValidity();
 };
-
