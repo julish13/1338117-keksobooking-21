@@ -5,7 +5,6 @@
 
 
   const map = document.querySelector(`.map`);
-  const pinsList = document.querySelector(`.map__pins`);
   const pinMain = document.querySelector(`.map__pin--main`);
   const pinMainHeight = pinMain.offsetHeight;
   const adForm = document.querySelector(`.ad-form`);
@@ -20,50 +19,7 @@
   const filtersForm = document.querySelector(`.map__filters`);
 
 
-  window.pin.renderPins(window.data.announcements);
-
-
-  const pinsListChildren = pinsList.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-
-
-  let onPopupEscPress = function (evt) {
-    if (evt.key === `Escape`) {
-      closePopup();
-    }
-  };
-
-  let openPopup = function (evt) {
-    for (let i = 0; i < pinsListChildren.length; i++) {
-      const target = evt.target.parentNode === pinsListChildren[i] || evt.target === pinsListChildren[i];
-      if (window.card.cardPopup) {
-        if (target) {
-          window.card.cardPopup.remove();
-        }
-      }
-
-      if (target) {
-        window.card.renderCard(window.data.announcements[i]);
-        document.addEventListener(`keydown`, onPopupEscPress);
-        window.card.popupCloseButton.addEventListener(`click`, closePopup);
-      }
-    }
-  };
-
-  let closePopup = function () {
-
-    window.card.cardPopup.remove();
-
-    document.removeEventListener(`keydown`, onPopupEscPress);
-    if (window.card.popupCloseButton) {
-      window.card.popupCloseButton.removeEventListener(`click`, closePopup);
-    }
-  };
-
-  let onPinEnterPress = function (evt) {
-    if (evt.key === `Enter`) {
-      openPopup(evt);
-    }
-  };
+  window.pin.renderPinsArray(window.data.announcements);
 
 
   let getActive = function () {
@@ -80,8 +36,8 @@
     priceInput.addEventListener(`input`, window.form.validatePrice);
     roomsInput.addEventListener(`input`, window.form.validateRoomCapacity);
     capacityInput.addEventListener(`input`, window.form.validateRoomCapacity);
-    map.addEventListener(`click`, openPopup);
-    map.addEventListener(`keydown`, onPinEnterPress);
+    map.addEventListener(`click`, window.card.openPopup);
+    map.addEventListener(`keydown`, window.card.onPinEnterPress);
   };
 
   pinMain.addEventListener(`mousedown`, getActive);

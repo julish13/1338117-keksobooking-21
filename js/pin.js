@@ -16,7 +16,7 @@
   };
 
 
-  let renderPins = function (data) {
+  let renderPinsArray = function (data) {
     const fragment = document.createDocumentFragment();
 
     for (let i = 0; i < data.length; i++) {
@@ -27,6 +27,6 @@
   };
 
   window.pin = {
-    renderPins
+    renderPinsArray
   };
 })();
