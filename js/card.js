@@ -62,8 +62,6 @@
     map.insertBefore(fragmentCard, mapFiltersContainer);
   };
 
-  const pinsListChildren = pinsList.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-
 
   let onPopupEscPress = function (evt) {
     if (evt.key === `Escape`) {
@@ -72,6 +70,7 @@
   };
 
   let openPopup = function (evt) {
+    const pinsListChildren = pinsList.querySelectorAll(`.map__pin:not(.map__pin--main)`);
     for (let i = 0; i < pinsListChildren.length; i++) {
       const target = evt.target.parentNode === pinsListChildren[i] || evt.target === pinsListChildren[i];
       if (cardPopup) {
