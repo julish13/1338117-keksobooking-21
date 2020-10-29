@@ -76,7 +76,7 @@
     adForm.classList.remove(`ad-form--disabled`);
 
     if (!pinsList.querySelector(`.map__pin:not(.map__pin--main)`)) {
-      window.pin.renderPinsArray(window.data.announcements);
+      window.backend.load(window.pin.renderPinsArray, window.backend.errorHandler);
     }
 
     window.form.changeFormAbility(adForm, true);
