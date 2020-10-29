@@ -57,11 +57,11 @@
       } else {
         pinMain.style.left = `${pinMain.offsetLeft - shift.x}px`;
       }
+      addressInput.value = window.form.getAddressFromPinPosition(pinMainTotalHeight);
     };
 
 
     let onMouseUp = function () {
-      addressInput.value = window.form.getAddressFromPinPosition(undefined, pinMainTotalHeight);
       document.removeEventListener(`mousemove`, onMouseMove);
       document.removeEventListener(`mouseup`, onMouseUp);
     };
