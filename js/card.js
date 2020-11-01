@@ -81,7 +81,7 @@
       }
 
       if (target) {
-        renderCard(window.main.announcements[i]);
+        renderCard(window.backend.announcements[i]);
         document.addEventListener(`keydown`, onPopupEscPress);
         popupCloseButton.addEventListener(`click`, closePopup);
       }
@@ -104,8 +104,6 @@
     }
   };
 
-  // map.addEventListener(`click`, openPopup);
-  // map.addEventListener(`keydown`, onPinEnterPress);
 
   window.card = {
     openPopup,

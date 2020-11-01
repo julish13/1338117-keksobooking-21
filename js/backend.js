@@ -59,11 +59,25 @@
     xhr.send(data);
   };
 
+  let announcements = [];
+
+
+  let createAnnouncementsArray = function (data) {
+    for (let i = 0; i < data.length; i++) {
+      announcements[i] = data[i];
+    }
+  };
+
+
+  load(createAnnouncementsArray, errorHandler);
+
 
   window.backend = {
     load,
     save,
-    errorHandler
+    errorHandler,
+    createAnnouncementsArray,
+    announcements
   };
 })();
 
