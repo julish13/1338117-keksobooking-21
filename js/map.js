@@ -15,7 +15,6 @@
   const filtersForm = document.querySelector(`.map__filters`);
 
 
-
   // let submitForm = function () {
   //   map.classList.add(`map--faded`);
   //   adForm.reset();

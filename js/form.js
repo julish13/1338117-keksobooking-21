@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  const map = document.querySelector(`.map`);
+  const pinsList = document.querySelector(`.map__pins`);
   const pinMain = document.querySelector(`.map__pin--main`);
   const pinMainWidth = pinMain.offsetWidth;
   const pinMainHeight = pinMain.offsetHeight;
@@ -40,10 +42,10 @@
     adForm.removeEventListener(`submit`, setFormEvtListener);
   };
 
-  let setFormEvtListener = function(evt) {
+  let setFormEvtListener = function (evt) {
     evt.preventDefault();
     window.backend.save(new FormData(adForm), submitForm, window.backend.errorHandler);
-  }
+  };
 
 
   changeFormAbility(adForm, false);
