@@ -16,29 +16,26 @@
 
 
 
-  let submitForm = function () {
-    map.classList.add(`map--faded`);
-    adForm.reset();
-    filtersForm.reset();
-    window.form.changeFormAbility(adForm, false);
-    window.form.changeFormAbility(filtersForm, false);
-    adForm.classList.add(`ad-form--disabled`);
-    for (let pin of pinsList.querySelectorAll(`.map__pin:not(.map__pin--main)`)) {
-      pin.remove();
-    }
-    adForm.removeEventListener(`submit`, setFormEvtListener);
-  };
+  // let submitForm = function () {
+  //   map.classList.add(`map--faded`);
+  //   adForm.reset();
+  //   filtersForm.reset();
+  //   window.form.changeFormAbility(adForm, false);
+  //   window.form.changeFormAbility(filtersForm, false);
+  //   adForm.classList.add(`ad-form--disabled`);
+  //   for (let pin of pinsList.querySelectorAll(`.map__pin:not(.map__pin--main)`)) {
+  //     pin.remove();
+  //   }
+  //   // adForm.removeEventListener(`submit`, setFormEvtListener);
+  // };
 
-  let setFormEvtListener = function(evt) {
-    evt.preventDefault();
-    window.backend.save(new FormData(adForm), submitForm, window.backend.errorHandler);
-  }
+  // let setFormEvtListener = function(evt) {
+  //   evt.preventDefault();
+  //   window.backend.save(new FormData(adForm), submitForm, window.backend.errorHandler);
+  // }
 
   let getActive = function () {
-    debugger
-    // if (window.backend.announcements.length === 0) {
-      window.backend.load(window.backend.createAnnouncementsArray, window.backend.errorHandler);
-    // }
+    window.backend.load(window.backend.createAnnouncementsArray, window.backend.errorHandler);
 
     map.classList.remove(`map--faded`);
     adForm.classList.remove(`ad-form--disabled`);
@@ -74,24 +71,24 @@
     pinMain.addEventListener(`mousedown`, window.move);
     pinMain.addEventListener(`mousedown`, getActive);
     pinMain.addEventListener(`keydown`, onMainPinEnterPress);
-    adForm.addEventListener(`submit`, setFormEvtListener);
+    // adForm.addEventListener(`submit`, setFormEvtListener);
   };
 
-  let getInactive = function () {
-    map.classList.add(`map--faded`);
-    adForm.reset();
-    filtersForm.reset();
-    window.form.changeFormAbility(adForm, false);
-    window.form.changeFormAbility(filtersForm, false);
-    adForm.classList.add(`ad-form--disabled`);
+  // let getInactive = function () {
+  //   map.classList.add(`map--faded`);
+  //   adForm.reset();
+  //   filtersForm.reset();
+  //   window.form.changeFormAbility(adForm, false);
+  //   window.form.changeFormAbility(filtersForm, false);
+  //   adForm.classList.add(`ad-form--disabled`);
 
 
-    for (let pin of pinsList.querySelectorAll(`.map__pin:not(.map__pin--main)`)) {
-      pin.remove();
-    }
+  //   for (let pin of pinsList.querySelectorAll(`.map__pin:not(.map__pin--main)`)) {
+  //     pin.remove();
+  //   }
 
-    adForm.removeEventListener(`submit`, setFormEvtListener);
-  }
+  //   adForm.removeEventListener(`submit`, setFormEvtListener);
+  // }
 
   setListenersToPinMain();
 })();
