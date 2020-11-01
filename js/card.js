@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  const HOUSING_TYPES_VOCABULARY = {
+  const housingTypesMap = {
     flat: `Квартира`,
     bungalow: `Бунгало`,
     house: `Дом`,
@@ -19,7 +19,7 @@
     cardBox.querySelector(`.popup__title`).textContent = data.offer.title;
     cardBox.querySelector(`.popup__text--address`).textContent = data.offer.address;
     cardBox.querySelector(`.popup__text--price`).textContent = `${data.offer.price} ₽/ночь`;
-    cardBox.querySelector(`.popup__type`).textContent = HOUSING_TYPES_VOCABULARY[data.offer.type];
+    cardBox.querySelector(`.popup__type`).textContent = housingTypesMap[data.offer.type];
     cardBox.querySelector(`.popup__text--capacity`).textContent = `${data.offer.rooms} комнаты для ${data.offer.guests} гостей`;
     cardBox.querySelector(`.popup__text--time`).textContent = `Заезд после ${data.offer.checkin}, выезд до ${data.offer.checkout}`;
     cardBox.querySelector(`.popup__description`).textContent = data.offer.description;
@@ -65,6 +65,7 @@
 
   let onPopupEscPress = function (evt) {
     if (evt.key === `Escape`) {
+      evt.preventDefault();
       closePopup();
     }
   };
@@ -80,7 +81,7 @@
       }
 
       if (target) {
-        renderCard(window.data.announcements[i]);
+        renderCard(window.backend.announcements[i]);
         document.addEventListener(`keydown`, onPopupEscPress);
         popupCloseButton.addEventListener(`click`, closePopup);
       }
@@ -103,8 +104,6 @@
     }
   };
 
-  // map.addEventListener(`click`, openPopup);
-  // map.addEventListener(`keydown`, onPinEnterPress);
 
   window.card = {
     openPopup,

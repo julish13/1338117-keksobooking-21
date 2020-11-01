@@ -26,7 +26,8 @@
     pinsList.appendChild(fragment);
   };
 
+
   window.pin = {
-    renderPinsArray
+    renderPinsArray,
   };
 })();

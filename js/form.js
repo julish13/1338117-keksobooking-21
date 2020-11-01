@@ -40,11 +40,11 @@
   changeFormAbility(filtersForm, false);
 
 
-  let getAddressFromPinPosition = function (xFromUpLeft = pinMainWidth / 2, yFromUpLeft) {
+  let getAddressFromPinPosition = function (yFromUpLeft, xFromUpLeft = pinMainWidth / 2) {
     return `${parseInt(parseInt(pinMain.style.left, 10) + xFromUpLeft, 10)}, ${parseInt(parseInt(pinMain.style.top, 10) + yFromUpLeft, 10)}`;
   };
 
-  addressInput.value = getAddressFromPinPosition(undefined, pinMainHeight / 2);
+  addressInput.value = getAddressFromPinPosition(pinMainHeight / 2);
 
 
   let matchPriceToType = function () {
