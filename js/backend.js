@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  const URL_SAVE = `https://21.javascript.pages.academy/code-and-magick`;
+  const URL_SAVE = `https://21.javascript.pages.academy/keksobooking`;
   const URL_LOAD = `https://21.javascript.pages.academy/keksobooking/data`;
 
   const StatusCode = {
@@ -67,9 +67,6 @@
       announcements[i] = data[i];
     }
   };
-
-
-  load(createAnnouncementsArray, errorHandler);
 
 
   window.backend = {

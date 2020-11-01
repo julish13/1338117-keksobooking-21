@@ -1,0 +1,86 @@
+'use strict';
+
+(function () {
+  const PriceMinToType = {
+    bungalow: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000
+  };
+
+  const adForm = document.querySelector(`.ad-form`);
+  const titleInput = adForm.querySelector(`input[name=title]`);
+  const priceInput = adForm.querySelector(`input[name=price]`);
+  const typeInput = adForm.querySelector(`select[name=type]`);
+  const timeInInput = adForm.querySelector(`select[name=timein]`);
+  const timeOutInput = adForm.querySelector(`select[name=timeout]`);
+  const roomsInput = adForm.querySelector(`select[name=rooms]`);
+  const capacityInput = adForm.querySelector(`select[name=capacity]`);
+
+
+  let matchPriceToType = function () {
+    priceInput.min = priceInput.placeholder = PriceMinToType[typeInput.value];
+  };
+
+
+  let matchTimesOut = function () {
+    timeInInput.value = timeOutInput.value;
+  };
+
+  let matchTimesIn = function () {
+    timeOutInput.value = timeInInput.value;
+  };
+
+
+  let validateTitle = function () {
+    if (titleInput.value.length < titleInput.minLength) {
+      titleInput.setCustomValidity(`Заголовок должен состоять минимум из ${titleInput.minLength} символов`);
+    } else if (titleInput.value.length > titleInput.maxLength) {
+      titleInput.setCustomValidity(`Заголовок не должен превышать ${titleInput.maxLength} символов`);
+    } else {
+      titleInput.setCustomValidity(``);
+    }
+
+    titleInput.reportValidity();
+  };
+
+  let validatePrice = function () {
+    if (+priceInput.value < priceInput.min) {
+      priceInput.setCustomValidity(`Цена слишком маленькая`);
+    } else if (+priceInput.value > priceInput.max) {
+      priceInput.setCustomValidity(`Цена слишком большая`);
+    } else {
+      priceInput.setCustomValidity(``);
+    }
+
+    priceInput.reportValidity();
+  };
+
+  let validateRoomCapacity = function () {
+    if (+capacityInput.value === 0 && +roomsInput.value !== 100) {
+      roomsInput.setCustomValidity(`Нужно 100 комнат`);
+      capacityInput.setCustomValidity(``);
+    } else if (+capacityInput.value !== 0 && +roomsInput.value === 100) {
+      roomsInput.setCustomValidity(``);
+      capacityInput.setCustomValidity(`Не для гостей`);
+    } else if (+capacityInput.value > roomsInput.value) {
+      roomsInput.setCustomValidity(`Нужно больше комнат`);
+      capacityInput.setCustomValidity(``);
+    } else {
+      roomsInput.setCustomValidity(``);
+      capacityInput.setCustomValidity(``);
+    }
+
+    roomsInput.reportValidity();
+    capacityInput.reportValidity();
+  };
+
+  window.validation = {
+    matchPriceToType,
+    matchTimesOut,
+    matchTimesIn,
+    validateTitle,
+    validatePrice,
+    validateRoomCapacity
+  };
+})();
