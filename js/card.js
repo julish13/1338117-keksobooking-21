@@ -89,12 +89,13 @@
   };
 
   let closePopup = function () {
+    if (cardPopup) {
+      cardPopup.remove();
 
-    cardPopup.remove();
-
-    document.removeEventListener(`keydown`, onPopupEscPress);
-    if (popupCloseButton) {
-      popupCloseButton.removeEventListener(`click`, closePopup);
+      document.removeEventListener(`keydown`, onPopupEscPress);
+      if (popupCloseButton) {
+        popupCloseButton.removeEventListener(`click`, closePopup);
+      }
     }
   };
 
@@ -107,6 +108,7 @@
 
   window.card = {
     openPopup,
-    onPinEnterPress
+    closePopup,
+    onPinEnterPress,
   };
 })();

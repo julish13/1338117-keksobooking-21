@@ -9,21 +9,43 @@
   };
   const TIMEOUT_IN_MS = 10000;
 
+  const errorTemplate = document.querySelector(`#error`).content;
+  const successTemplate = document.querySelector(`#success`).content;
+  const adForm = document.querySelector(`.ad-form`);
+
+
+  let renderSuccessMessage = function () {
+    const successBox = successTemplate.querySelector(`.success`).cloneNode(true);
+    const fragmentSuccess = document.createDocumentFragment();
+    fragmentSuccess.appendChild(successBox);
+    return document.querySelector(`main`).insertAdjacentElement(`afterbegin`, successBox);
+  }
+
+  let createErrorBox = function (errorMessage) {
+    const errorBox = errorTemplate.querySelector(`.error`).cloneNode(true);
+    const errorMessageBox = errorBox.querySelector(`.error__message`);
+    errorMessageBox.textContent = errorMessage;
+    return errorBox;
+  }
+
 
   let errorHandler = function (errorMessage) {
-    const node = document.createElement(`div`);
-    node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
-    node.style.position = `absolute`;
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = `30px`;
+    const fragmentError = document.createDocumentFragment();
+    let errorBox = createErrorBox(errorMessage);
+    fragmentError.appendChild(errorBox);
+    const errorButton = errorBox.querySelector(`.error__button`);
+    let errorBoxHandler = function () {
+      errorBox.remove();
+      adForm.reset();
+      errorButton.removeEventListener(`click`, errorBoxHandler);
+    }
+    errorButton.addEventListener(`click`, errorBoxHandler);
+    document.querySelector(`main`).insertAdjacentElement(`afterbegin`, errorBox);
 
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
 
-  let setXhrListeners = function (xhr, onLoad, onError) {
+  let setXhrListeners = function (xhr, onLoad, onError, type) {
     xhr.responseType = `json`;
     xhr.addEventListener(`load`, function () {
       if (xhr.status === StatusCode.OK) {
@@ -47,33 +69,25 @@
 
   let load = function (onLoad, onError) {
     const xhr = new XMLHttpRequest();
-    setXhrListeners(xhr, onLoad, onError);
+    setXhrListeners(xhr, onLoad, onError, `load`);
     xhr.open(`GET`, URL_LOAD);
     xhr.send();
   };
 
   let save = function (data, onLoad, onError) {
     const xhr = new XMLHttpRequest();
-    setXhrListeners(xhr, onLoad, onError);
+    setXhrListeners(xhr, onLoad, onError, `save`);
     xhr.open(`POST`, URL_SAVE);
     xhr.send(data);
   };
 
   let announcements = [];
 
-
-  let createAnnouncementsArray = function (data) {
-    for (let i = 0; i < data.length; i++) {
-      announcements[i] = data[i];
-    }
-  };
-
-
   window.backend = {
     load,
     save,
+    renderSuccessMessage,
     errorHandler,
-    createAnnouncementsArray,
     announcements
   };
 })();
