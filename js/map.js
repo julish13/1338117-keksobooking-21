@@ -15,21 +15,21 @@
   const filtersForm = document.querySelector(`.map__filters`);
 
 
-  let onActivePage = function () {
-    window.backend.load(getActive, window.backend.errorHandler);
+  let onLoad = function () {
+    window.backend.load(onActivePage, window.backend.errorHandler);
   };
 
   let onMainPinEnterPress = function (evt) {
     if (evt.key === `Enter`) {
       if (window.backend.announcements.length === 0) {
-        onActivePage();
+        onLoad();
       } else {
-        getActive();
+        onActivePage();
       }
     }
   };
 
-  let getActive = function (data) {
+  let onActivePage = function (data) {
     if (window.backend.announcements.length === 0) {
       window.backend.announcements = data;
     }
@@ -43,22 +43,22 @@
       window.pin.renderPinsArray(window.backend.announcements);
     }
 
-    typeInput.addEventListener(`change`, window.validation.matchPriceToType);
-    timeInInput.addEventListener(`change`, window.validation.matchTimesIn);
-    timeOutInput.addEventListener(`change`, window.validation.matchTimesOut);
-    titleInput.addEventListener(`input`, window.validation.validateTitle);
-    priceInput.addEventListener(`input`, window.validation.validatePrice);
-    roomsInput.addEventListener(`input`, window.validation.validateRoomCapacity);
-    capacityInput.addEventListener(`input`, window.validation.validateRoomCapacity);
+    typeInput.addEventListener(`change`, window.validation.onChangeMatchPriceToType);
+    timeInInput.addEventListener(`change`, window.validation.onChangematchTimesIn);
+    timeOutInput.addEventListener(`change`, window.validation.onChangematchTimesOut);
+    titleInput.addEventListener(`input`, window.validation.onInputValidateTitle);
+    priceInput.addEventListener(`input`, window.validation.onInputValidatePrice);
+    roomsInput.addEventListener(`input`, window.validation.onInputValidateRoomCapacity);
+    capacityInput.addEventListener(`input`, window.validation.onInputValidateRoomCapacity);
 
-    map.addEventListener(`click`, window.card.openPopup);
-    map.addEventListener(`keydown`, window.card.onPinEnterPress);
+    map.addEventListener(`click`, window.card.onClickOpenPopup);
+    map.addEventListener(`keydown`, window.card.onPinEnterPressOpenPopup);
 
+    pinMain.removeEventListener(`mousedown`, onLoad);
     pinMain.removeEventListener(`mousedown`, onActivePage);
-    pinMain.removeEventListener(`mousedown`, getActive);
     pinMain.removeEventListener(`keydown`, onMainPinEnterPress);
 
-    adForm.addEventListener(`submit`, setFormEvtListener);
+    adForm.addEventListener(`submit`, onSubmitEvtListeners);
   };
 
 
@@ -74,34 +74,34 @@
       pin.remove();
     }
 
-    typeInput.removeEventListener(`change`, window.validation.matchPriceToType);
-    timeInInput.removeEventListener(`change`, window.validation.matchTimesIn);
-    timeOutInput.removeEventListener(`change`, window.validation.matchTimesOut);
-    titleInput.removeEventListener(`input`, window.validation.validateTitle);
-    priceInput.removeEventListener(`input`, window.validation.validatePrice);
-    roomsInput.removeEventListener(`input`, window.validation.validateRoomCapacity);
-    capacityInput.removeEventListener(`input`, window.validation.validateRoomCapacity);
+    typeInput.removeEventListener(`change`, window.validation.onChangeMatchPriceToType);
+    timeInInput.removeEventListener(`change`, window.validation.onChangematchTimesIn);
+    timeOutInput.removeEventListener(`change`, window.validation.onChangematchTimesOut);
+    titleInput.removeEventListener(`input`, window.validation.onInputValidateTitle);
+    priceInput.removeEventListener(`input`, window.validation.onInputValidatePrice);
+    roomsInput.removeEventListener(`input`, window.validation.onInputValidateRoomCapacity);
+    capacityInput.removeEventListener(`input`, window.validation.onInputValidateRoomCapacity);
 
-    map.removeEventListener(`click`, window.card.openPopup);
-    map.removeEventListener(`keydown`, window.card.onPinEnterPress);
+    map.removeEventListener(`click`, window.card.onClickOpenPopup);
+    map.removeEventListener(`keydown`, window.card.onPinEnterPressOpenPopup);
 
-    adForm.removeEventListener(`submit`, setFormEvtListener);
+    adForm.removeEventListener(`submit`, onSubmitEvtListeners);
 
     setListenersToPinMain();
 
-    window.card.closePopup();
+    window.card.onClickClosePopup();
   };
 
   let successMessage;
 
-  let removeSuccessMessage = function () {
+  let onClickRemoveSuccessMessage = function () {
     successMessage.remove();
-    document.removeEventListener(`click`, removeSuccessMessage);
+    document.removeEventListener(`click`, onClickRemoveSuccessMessage);
   };
 
   let onEscPressRemoveSuccessMessage = function (evt) {
     if (evt.key === `Escape`) {
-      removeSuccessMessage();
+      onClickRemoveSuccessMessage();
     }
     document.removeEventListener(`keydown`, onEscPressRemoveSuccessMessage);
   };
@@ -111,24 +111,24 @@
     successMessage = window.backend.renderSuccessMessage();
     getInactive();
 
-    document.addEventListener(`click`, removeSuccessMessage);
+    document.addEventListener(`click`, onClickRemoveSuccessMessage);
     document.addEventListener(`keydown`, onEscPressRemoveSuccessMessage);
   };
 
 
-  let setFormEvtListener = function (evt) {
+  let onSubmitEvtListeners = function (evt) {
     evt.preventDefault();
     window.backend.save(new FormData(adForm), successHandler, window.backend.errorHandler);
   };
 
 
   let setListenersToPinMain = function () {
-    pinMain.addEventListener(`mousedown`, window.move);
+    pinMain.addEventListener(`mousedown`, window.move.onMovePin);
 
     if (window.backend.announcements.length === 0) {
-      pinMain.addEventListener(`mousedown`, onActivePage);
+      pinMain.addEventListener(`mousedown`, onLoad);
     } else {
-      pinMain.addEventListener(`mousedown`, getActive);
+      pinMain.addEventListener(`mousedown`, onActivePage);
     }
 
     pinMain.addEventListener(`keydown`, onMainPinEnterPress);

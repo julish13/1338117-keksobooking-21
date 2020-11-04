@@ -18,21 +18,21 @@
   const capacityInput = adForm.querySelector(`select[name=capacity]`);
 
 
-  let matchPriceToType = function () {
+  let onChangeMatchPriceToType = function () {
     priceInput.min = priceInput.placeholder = PriceMinToType[typeInput.value];
   };
 
 
-  let matchTimesOut = function () {
+  let onChangematchTimesOut = function () {
     timeInInput.value = timeOutInput.value;
   };
 
-  let matchTimesIn = function () {
+  let onChangematchTimesIn = function () {
     timeOutInput.value = timeInInput.value;
   };
 
 
-  let validateTitle = function () {
+  let onInputValidateTitle = function () {
     if (titleInput.value.length < titleInput.minLength) {
       titleInput.setCustomValidity(`Заголовок должен состоять минимум из ${titleInput.minLength} символов`);
     } else if (titleInput.value.length > titleInput.maxLength) {
@@ -44,7 +44,7 @@
     titleInput.reportValidity();
   };
 
-  let validatePrice = function () {
+  let onInputValidatePrice = function () {
     if (+priceInput.value < priceInput.min) {
       priceInput.setCustomValidity(`Цена слишком маленькая`);
     } else if (+priceInput.value > priceInput.max) {
@@ -56,7 +56,7 @@
     priceInput.reportValidity();
   };
 
-  let validateRoomCapacity = function () {
+  let onInputValidateRoomCapacity = function () {
     if (+capacityInput.value === 0 && +roomsInput.value !== 100) {
       roomsInput.setCustomValidity(`Нужно 100 комнат`);
       capacityInput.setCustomValidity(``);
@@ -76,11 +76,11 @@
   };
 
   window.validation = {
-    matchPriceToType,
-    matchTimesOut,
-    matchTimesIn,
-    validateTitle,
-    validatePrice,
-    validateRoomCapacity
+    onChangeMatchPriceToType,
+    onChangematchTimesOut,
+    onChangematchTimesIn,
+    onInputValidateTitle,
+    onInputValidatePrice,
+    onInputValidateRoomCapacity
   };
 })();

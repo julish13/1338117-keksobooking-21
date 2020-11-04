@@ -66,11 +66,11 @@
   let onPopupEscPress = function (evt) {
     if (evt.key === `Escape`) {
       evt.preventDefault();
-      closePopup();
+      onClickClosePopup();
     }
   };
 
-  let openPopup = function (evt) {
+  let onClickOpenPopup = function (evt) {
     const pinsListChildren = pinsList.querySelectorAll(`.map__pin:not(.map__pin--main)`);
     for (let i = 0; i < pinsListChildren.length; i++) {
       const target = evt.target.parentNode === pinsListChildren[i] || evt.target === pinsListChildren[i];
@@ -83,32 +83,32 @@
       if (target) {
         renderCard(window.backend.announcements[i]);
         document.addEventListener(`keydown`, onPopupEscPress);
-        popupCloseButton.addEventListener(`click`, closePopup);
+        popupCloseButton.addEventListener(`click`, onClickClosePopup);
       }
     }
   };
 
-  let closePopup = function () {
+  let onClickClosePopup = function () {
     if (cardPopup) {
       cardPopup.remove();
 
       document.removeEventListener(`keydown`, onPopupEscPress);
       if (popupCloseButton) {
-        popupCloseButton.removeEventListener(`click`, closePopup);
+        popupCloseButton.removeEventListener(`click`, onClickClosePopup);
       }
     }
   };
 
-  let onPinEnterPress = function (evt) {
+  let onPinEnterPressOpenPopup = function (evt) {
     if (evt.key === `Enter`) {
-      openPopup(evt);
+      onClickOpenPopup(evt);
     }
   };
 
 
   window.card = {
-    openPopup,
-    closePopup,
-    onPinEnterPress,
+    onClickOpenPopup,
+    onClickClosePopup,
+    onPinEnterPressOpenPopup,
   };
 })();

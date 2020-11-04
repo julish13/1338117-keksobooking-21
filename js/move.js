@@ -17,7 +17,7 @@
   const addressInput = adForm.querySelector(`input[name=address]`);
 
 
-  let movePin = function (evt) {
+  let onMovePin = function (evt) {
     let startCoords = {
       x: evt.clientX,
       y: evt.clientY
@@ -62,5 +62,7 @@
     document.addEventListener(`mouseup`, onMouseUp);
   };
 
-  window.move = movePin;
+  window.move = {
+    onMovePin
+  };
 })();
