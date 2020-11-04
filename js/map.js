@@ -67,6 +67,7 @@
       window.backend.announcements.filter(function (item) {
         return item.offer.type === typesSelected.value;
       });
+      window.card.onClickClosePopup();
     });
   };
 
