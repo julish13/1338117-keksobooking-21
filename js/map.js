@@ -14,6 +14,11 @@
   const capacityInput = adForm.querySelector(`select[name=capacity]`);
   const filtersForm = document.querySelector(`.map__filters`);
 
+  const typesSelect = filtersForm.querySelector(`select[name=housing-type]`);
+  const typesSelected = typesSelect.querySelector('option:checked');
+
+  const PINS_AMOUNT = 5;
+
 
   let onLoad = function () {
     window.backend.load(onActivePage, window.backend.errorHandler);
@@ -31,7 +36,7 @@
 
   let onActivePage = function (data) {
     if (window.backend.announcements.length === 0) {
-      window.backend.announcements = data;
+      window.backend.announcements = window.filter.updateData(data);
     }
 
     map.classList.remove(`map--faded`);
@@ -59,7 +64,14 @@
     pinMain.removeEventListener(`keydown`, onMainPinEnterPress);
 
     adForm.addEventListener(`submit`, onSubmitEvtListeners);
+
+    typesSelect.addEventListener(`input`, function () {
+      window.backend.announcements.filter(function (item) {
+        return item.offer.price > 10000;
+      });
+    });
   };
+
 
 
   let getInactive = function () {
@@ -117,4 +129,8 @@
 
 
   setListenersToPinMain();
+
+
+
+
 })();

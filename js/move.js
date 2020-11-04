@@ -49,7 +49,7 @@
       } else {
         pinMain.style.left = `${pinMain.offsetLeft - shift.x}px`;
       }
-      addressInput.value = window.form.getAddressFromPinPosition(pinMainTotalHeight);
+      addressInput.value = window.adForm.getAddressFromPinPosition(pinMainTotalHeight);
     };
 
 
