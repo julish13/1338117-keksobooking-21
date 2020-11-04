@@ -15,9 +15,7 @@
   const filtersForm = document.querySelector(`.map__filters`);
 
   const typesSelect = filtersForm.querySelector(`select[name=housing-type]`);
-  const typesSelected = typesSelect.querySelector('option:checked');
-
-  const PINS_AMOUNT = 5;
+  const typesSelected = typesSelect.querySelector(`option:checked`);
 
 
   let onLoad = function () {
@@ -65,13 +63,12 @@
 
     adForm.addEventListener(`submit`, onSubmitEvtListeners);
 
-    typesSelect.addEventListener(`input`, function () {
+    typesSelect.addEventListener(`change`, function () {
       window.backend.announcements.filter(function (item) {
-        return item.offer.price > 10000;
+        return item.offer.type === typesSelected.value;
       });
     });
   };
-
 
 
   let getInactive = function () {
@@ -129,8 +126,4 @@
 
 
   setListenersToPinMain();
-
-
-
-
 })();
