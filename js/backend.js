@@ -9,17 +9,10 @@
   };
   const TIMEOUT_IN_MS = 10000;
 
+
   const errorTemplate = document.querySelector(`#error`).content;
-  const successTemplate = document.querySelector(`#success`).content;
   const adForm = document.querySelector(`.ad-form`);
 
-
-  let renderSuccessMessage = function () {
-    const successBox = successTemplate.querySelector(`.success`).cloneNode(true);
-    const fragmentSuccess = document.createDocumentFragment();
-    fragmentSuccess.appendChild(successBox);
-    return document.querySelector(`main`).insertAdjacentElement(`afterbegin`, successBox);
-  };
 
   let createErrorBox = function (errorMessage) {
     const errorBox = errorTemplate.querySelector(`.error`).cloneNode(true);
@@ -81,14 +74,14 @@
     xhr.send(data);
   };
 
+
   let announcements = [];
 
   window.backend = {
     load,
     save,
-    renderSuccessMessage,
     errorHandler,
-    announcements
+    announcements,
   };
 })();
 

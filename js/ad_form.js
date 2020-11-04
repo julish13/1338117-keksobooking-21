@@ -7,6 +7,7 @@
   const adForm = document.querySelector(`.ad-form`);
   const addressInput = adForm.querySelector(`input[name=address]`);
   const filtersForm = document.querySelector(`.map__filters`);
+  const successTemplate = document.querySelector(`#success`).content;
 
 
   let changeFormAbility = function (form, ability) {
@@ -28,12 +29,48 @@
   };
 
 
+  let renderSuccessMessage = function () {
+    const successBox = successTemplate.querySelector(`.success`).cloneNode(true);
+    const fragmentSuccess = document.createDocumentFragment();
+    fragmentSuccess.appendChild(successBox);
+    return document.querySelector(`main`).insertAdjacentElement(`afterbegin`, successBox);
+  };
+
+
+  let successMessage;
+
+
+  let onClickRemoveSuccessMessage = function () {
+    successMessage.remove();
+    document.removeEventListener(`click`, onClickRemoveSuccessMessage);
+  };
+
+
+  let onEscPressRemoveSuccessMessage = function (evt) {
+    if (evt.key === `Escape`) {
+      onClickRemoveSuccessMessage();
+    }
+    document.removeEventListener(`keydown`, onEscPressRemoveSuccessMessage);
+  };
+
+
+  let submitSuccessHandler = function (cb) {
+    successMessage = renderSuccessMessage();
+    cb();
+
+    document.addEventListener(`click`, onClickRemoveSuccessMessage);
+    document.addEventListener(`keydown`, onEscPressRemoveSuccessMessage);
+  };
+
+
   changeFormAbility(adForm, false);
   changeFormAbility(filtersForm, false);
   addressInput.value = getAddressFromPinPosition(pinMainHeight / 2);
 
-  window.form = {
+
+  window.adForm = {
     changeFormAbility,
     getAddressFromPinPosition,
+    submitSuccessHandler
   };
 })();

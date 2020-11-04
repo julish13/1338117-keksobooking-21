@@ -36,8 +36,8 @@
 
     map.classList.remove(`map--faded`);
     adForm.classList.remove(`ad-form--disabled`);
-    window.form.changeFormAbility(adForm, true);
-    window.form.changeFormAbility(filtersForm, true);
+    window.adForm.changeFormAbility(adForm, true);
+    window.adForm.changeFormAbility(filtersForm, true);
 
     if (!pinsList.querySelector(`.map__pin:not(.map__pin--main)`)) {
       window.pin.renderPinsArray(window.backend.announcements);
@@ -66,8 +66,8 @@
     map.classList.add(`map--faded`);
     adForm.reset();
     filtersForm.reset();
-    window.form.changeFormAbility(adForm, false);
-    window.form.changeFormAbility(filtersForm, false);
+    window.adForm.changeFormAbility(adForm, false);
+    window.adForm.changeFormAbility(filtersForm, false);
     adForm.classList.add(`ad-form--disabled`);
 
     for (let pin of pinsList.querySelectorAll(`.map__pin:not(.map__pin--main)`)) {
@@ -92,33 +92,14 @@
     window.card.onClickClosePopup();
   };
 
-  let successMessage;
 
-  let onClickRemoveSuccessMessage = function () {
-    successMessage.remove();
-    document.removeEventListener(`click`, onClickRemoveSuccessMessage);
+  let x = function () {
+    window.adForm.submitSuccessHandler(getInactive);
   };
-
-  let onEscPressRemoveSuccessMessage = function (evt) {
-    if (evt.key === `Escape`) {
-      onClickRemoveSuccessMessage();
-    }
-    document.removeEventListener(`keydown`, onEscPressRemoveSuccessMessage);
-  };
-
-
-  let successHandler = function () {
-    successMessage = window.backend.renderSuccessMessage();
-    getInactive();
-
-    document.addEventListener(`click`, onClickRemoveSuccessMessage);
-    document.addEventListener(`keydown`, onEscPressRemoveSuccessMessage);
-  };
-
 
   let onSubmitEvtListeners = function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(adForm), successHandler, window.backend.errorHandler);
+    window.backend.save(new FormData(adForm), x, window.backend.errorHandler);
   };
 
 
