@@ -54,7 +54,7 @@
   };
 
 
-  let submitSuccessHandler = function (cb) {
+  let submitForm = function (cb) {
     successMessage = renderSuccessMessage();
     cb();
 
@@ -71,6 +71,6 @@
   window.adForm = {
     changeFormAbility,
     getAddressFromPinPosition,
-    submitSuccessHandler
+    submitForm
   };
 })();

@@ -93,13 +93,13 @@
   };
 
 
-  let x = function () {
-    window.adForm.submitSuccessHandler(getInactive);
+  let submitSuccessHandler = function () {
+    window.adForm.submitForm(getInactive);
   };
 
   let onSubmitEvtListeners = function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(adForm), x, window.backend.errorHandler);
+    window.backend.save(new FormData(adForm), submitSuccessHandler, window.backend.errorHandler);
   };
 
 
