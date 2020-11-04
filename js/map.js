@@ -17,7 +17,7 @@
 
   let onActivePage = function () {
     window.backend.load(getActive, window.backend.errorHandler);
-  }
+  };
 
   let onMainPinEnterPress = function (evt) {
     if (evt.key === `Enter`) {
@@ -90,7 +90,7 @@
     setListenersToPinMain();
 
     window.card.closePopup();
-  }
+  };
 
   let successMessage;
 
@@ -99,12 +99,12 @@
     document.removeEventListener(`click`, removeSuccessMessage);
   };
 
-  let onEscPressRemoveSuccessMessage = function () {
+  let onEscPressRemoveSuccessMessage = function (evt) {
     if (evt.key === `Escape`) {
       removeSuccessMessage();
     }
     document.removeEventListener(`keydown`, onEscPressRemoveSuccessMessage);
-  }
+  };
 
 
   let successHandler = function () {
@@ -113,13 +113,13 @@
 
     document.addEventListener(`click`, removeSuccessMessage);
     document.addEventListener(`keydown`, onEscPressRemoveSuccessMessage);
-  }
+  };
 
 
-  let setFormEvtListener = function(evt) {
+  let setFormEvtListener = function (evt) {
     evt.preventDefault();
     window.backend.save(new FormData(adForm), successHandler, window.backend.errorHandler);
-  }
+  };
 
 
   let setListenersToPinMain = function () {

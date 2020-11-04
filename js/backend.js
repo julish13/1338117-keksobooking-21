@@ -19,14 +19,14 @@
     const fragmentSuccess = document.createDocumentFragment();
     fragmentSuccess.appendChild(successBox);
     return document.querySelector(`main`).insertAdjacentElement(`afterbegin`, successBox);
-  }
+  };
 
   let createErrorBox = function (errorMessage) {
     const errorBox = errorTemplate.querySelector(`.error`).cloneNode(true);
     const errorMessageBox = errorBox.querySelector(`.error__message`);
     errorMessageBox.textContent = errorMessage;
     return errorBox;
-  }
+  };
 
 
   let errorHandler = function (errorMessage) {
@@ -38,14 +38,14 @@
       errorBox.remove();
       adForm.reset();
       errorButton.removeEventListener(`click`, errorBoxHandler);
-    }
+    };
     errorButton.addEventListener(`click`, errorBoxHandler);
     document.querySelector(`main`).insertAdjacentElement(`afterbegin`, errorBox);
 
   };
 
 
-  let setXhrListeners = function (xhr, onLoad, onError, type) {
+  let setXhrListeners = function (xhr, onLoad, onError) {
     xhr.responseType = `json`;
     xhr.addEventListener(`load`, function () {
       if (xhr.status === StatusCode.OK) {
@@ -69,14 +69,14 @@
 
   let load = function (onLoad, onError) {
     const xhr = new XMLHttpRequest();
-    setXhrListeners(xhr, onLoad, onError, `load`);
+    setXhrListeners(xhr, onLoad, onError);
     xhr.open(`GET`, URL_LOAD);
     xhr.send();
   };
 
   let save = function (data, onLoad, onError) {
     const xhr = new XMLHttpRequest();
-    setXhrListeners(xhr, onLoad, onError, `save`);
+    setXhrListeners(xhr, onLoad, onError);
     xhr.open(`POST`, URL_SAVE);
     xhr.send(data);
   };
