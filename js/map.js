@@ -33,7 +33,9 @@
 
   let onActivePage = function (data) {
     if (window.backend.announcements.length === 0) {
-      window.backend.announcements = data;
+      window.backend.announcements = data.filter(function (item) {
+        return item.offer !== undefined;
+      });
     }
 
     map.classList.remove(`map--faded`);
