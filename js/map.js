@@ -15,7 +15,6 @@
   const filtersForm = document.querySelector(`.map__filters`);
 
   const typesSelect = filtersForm.querySelector(`select[name=housing-type]`);
-  const typesSelected = typesSelect.querySelector(`option:checked`);
 
 
   let onLoad = function () {
@@ -34,7 +33,8 @@
 
   let onActivePage = function (data) {
     if (window.backend.announcements.length === 0) {
-      window.backend.announcements = window.filter.updateData(data);
+      // window.backend.announcements = window.filterData.updateData(data);
+      window.backend.announcements = data;
     }
 
     map.classList.remove(`map--faded`);
@@ -43,7 +43,7 @@
     window.adForm.changeFormAbility(filtersForm, true);
 
     if (!pinsList.querySelector(`.map__pin:not(.map__pin--main)`)) {
-      window.pin.renderPinsArray(window.backend.announcements);
+      window.pin.renderPinsArray(window.filterData.updateData(window.backend.announcements));
     }
 
     typeInput.addEventListener(`change`, window.validation.onChangeMatchPriceToType);
@@ -63,12 +63,7 @@
 
     adForm.addEventListener(`submit`, onSubmitEvtListeners);
 
-    typesSelect.addEventListener(`change`, function () {
-      window.backend.announcements.filter(function (item) {
-        return item.offer.type === typesSelected.value;
-      });
-      window.card.onClickClosePopup();
-    });
+    typesSelect.addEventListener(`change`, window.filterData.onTypeFilter);
   };
 
 

@@ -76,12 +76,13 @@
 
 
   let announcements = [];
-
+  let filteredAnnouncements = [];
   window.backend = {
     load,
     save,
     errorHandler,
     announcements,
+    filteredAnnouncements
   };
 })();
 

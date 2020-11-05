@@ -81,7 +81,11 @@
       }
 
       if (target) {
-        renderCard(window.backend.announcements[i]);
+        if (window.backend.filteredAnnouncements.length !== 0) {
+          renderCard(window.filterData.updateData(window.backend.filteredAnnouncements)[i])
+        } else {
+          renderCard(window.filterData.updateData(window.backend.announcements)[i])
+        };
         document.addEventListener(`keydown`, onPopupEscPress);
         popupCloseButton.addEventListener(`click`, onClickClosePopup);
       }
