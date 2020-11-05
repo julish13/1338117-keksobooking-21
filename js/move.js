@@ -17,7 +17,7 @@
   const addressInput = adForm.querySelector(`input[name=address]`);
 
 
-  let movePin = function (evt) {
+  let onMovePin = function (evt) {
     let startCoords = {
       x: evt.clientX,
       y: evt.clientY
@@ -49,7 +49,7 @@
       } else {
         pinMain.style.left = `${pinMain.offsetLeft - shift.x}px`;
       }
-      addressInput.value = window.form.getAddressFromPinPosition(pinMainTotalHeight);
+      addressInput.value = window.adForm.getAddressFromPinPosition(pinMainTotalHeight);
     };
 
 
@@ -62,5 +62,7 @@
     document.addEventListener(`mouseup`, onMouseUp);
   };
 
-  window.move = movePin;
+  window.move = {
+    onMovePin
+  };
 })();

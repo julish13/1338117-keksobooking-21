@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  const URL_SAVE = `https://21.javascript.pages.academy/code-and-magick`;
+  const URL_SAVE = `https://21.javascript.pages.academy/keksobooking`;
   const URL_LOAD = `https://21.javascript.pages.academy/keksobooking/data`;
 
   const StatusCode = {
@@ -10,16 +10,31 @@
   const TIMEOUT_IN_MS = 10000;
 
 
-  let errorHandler = function (errorMessage) {
-    const node = document.createElement(`div`);
-    node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
-    node.style.position = `absolute`;
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = `30px`;
+  const errorTemplate = document.querySelector(`#error`).content;
+  const adForm = document.querySelector(`.ad-form`);
 
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement(`afterbegin`, node);
+
+  let createErrorBox = function (errorMessage) {
+    const errorBox = errorTemplate.querySelector(`.error`).cloneNode(true);
+    const errorMessageBox = errorBox.querySelector(`.error__message`);
+    errorMessageBox.textContent = errorMessage;
+    return errorBox;
+  };
+
+
+  let errorHandler = function (errorMessage) {
+    const fragmentError = document.createDocumentFragment();
+    let errorBox = createErrorBox(errorMessage);
+    fragmentError.appendChild(errorBox);
+    const errorButton = errorBox.querySelector(`.error__button`);
+    let errorBoxHandler = function () {
+      errorBox.remove();
+      adForm.reset();
+      errorButton.removeEventListener(`click`, errorBoxHandler);
+    };
+    errorButton.addEventListener(`click`, errorBoxHandler);
+    document.querySelector(`main`).insertAdjacentElement(`afterbegin`, errorBox);
+
   };
 
 
@@ -59,25 +74,15 @@
     xhr.send(data);
   };
 
+
   let announcements = [];
-
-
-  let createAnnouncementsArray = function (data) {
-    for (let i = 0; i < data.length; i++) {
-      announcements[i] = data[i];
-    }
-  };
-
-
-  load(createAnnouncementsArray, errorHandler);
-
-
+  let filteredAnnouncements = [];
   window.backend = {
     load,
     save,
     errorHandler,
-    createAnnouncementsArray,
-    announcements
+    announcements,
+    filteredAnnouncements
   };
 })();
 
