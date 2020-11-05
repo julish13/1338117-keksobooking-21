@@ -8,7 +8,7 @@
   const PINS_AMOUNT = 5;
 
 
-  let updateData = function (data) {
+  let cutData = function (data) {
     return data.slice(0, PINS_AMOUNT);
   };
 
@@ -18,15 +18,15 @@
       pin.remove();
     }
 
-    window.backend.filteredAnnouncements = updateData(window.backend.announcements.filter(function (item) {
+    window.backend.filteredAnnouncements = cutData(window.backend.announcements.filter(function (item) {
       return item.offer.type === typesSelect.value;
     }));
 
     window.pin.renderPinsArray(window.backend.filteredAnnouncements);
-  }
+  };
 
   window.filterData = {
-    updateData,
+    cutData,
     onTypeFilter
   };
 })();

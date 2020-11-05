@@ -33,7 +33,6 @@
 
   let onActivePage = function (data) {
     if (window.backend.announcements.length === 0) {
-      // window.backend.announcements = window.filterData.updateData(data);
       window.backend.announcements = data;
     }
 
@@ -43,7 +42,7 @@
     window.adForm.changeFormAbility(filtersForm, true);
 
     if (!pinsList.querySelector(`.map__pin:not(.map__pin--main)`)) {
-      window.pin.renderPinsArray(window.filterData.updateData(window.backend.announcements));
+      window.pin.renderPinsArray(window.filterData.cutData(window.backend.announcements));
     }
 
     typeInput.addEventListener(`change`, window.validation.onChangeMatchPriceToType);
@@ -91,6 +90,8 @@
     map.removeEventListener(`keydown`, window.card.onPinEnterPressOpenPopup);
 
     adForm.removeEventListener(`submit`, onSubmitEvtListeners);
+
+    typesSelect.removeEventListener(`change`, window.filterData.onTypeFilter);
 
     setListenersToPinMain();
 
