@@ -116,6 +116,14 @@
     map.insertBefore(fragmentCard, mapFiltersContainer);
   };
 
+  let closePopup = function () {
+    const activePin = pinsList.querySelector(`.map__pin--active`);
+    if (activePin) {
+      activePin.classList.remove(`map__pin--active`);
+    }
+    cardPopup.remove();
+  }
+
 
   let onPopupEscPress = function (evt) {
     if (evt.key === `Escape`) {
@@ -130,8 +138,7 @@
       const target = evt.target.parentNode === pinsListChildren[i] || evt.target === pinsListChildren[i];
       if (cardPopup) {
         if (target) {
-          cardPopup.remove();
-          pinsList.querySelector(`.map__pin--active`).classList.remove(`map__pin--active`);
+          closePopup();
         }
       }
 
@@ -150,8 +157,7 @@
 
   let onClickClosePopup = function () {
     if (cardPopup) {
-      cardPopup.remove();
-      pinsList.querySelector(`.map__pin--active`).classList.remove(`map__pin--active`);
+      closePopup();
 
       document.removeEventListener(`keydown`, onPopupEscPress);
       if (popupCloseButton) {
