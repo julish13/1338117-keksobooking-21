@@ -64,7 +64,7 @@
 
     adForm.addEventListener(`submit`, onSubmitEvtListeners);
 
-    typesSelect.addEventListener(`change`, window.filterData.onTypeFilter);
+    filtersForm.addEventListener(`change`, window.filterData.onChangeFilter);
   };
 
 
@@ -93,7 +93,7 @@
 
     adForm.removeEventListener(`submit`, onSubmitEvtListeners);
 
-    typesSelect.removeEventListener(`change`, window.filterData.onTypeFilter);
+    filtersForm.removeEventListener(`change`, window.filterData.onChangeFilter);
 
     setListenersToPinMain();
 
