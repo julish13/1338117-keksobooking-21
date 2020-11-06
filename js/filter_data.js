@@ -18,7 +18,7 @@
   };
 
 
-  let onChange = window.debounce(function () {
+  let onFilterChange = window.debounce(function () {
     window.card.onClickClosePopup();
     for (let pin of pinsList.querySelectorAll(`.map__pin:not(.map__pin--main)`)) {
       pin.remove();
@@ -73,6 +73,6 @@
 
   window.filterData = {
     cutData,
-    onChange
+    onChange: onFilterChange
   };
 })();
