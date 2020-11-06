@@ -24,8 +24,18 @@
   };
 
 
+  let getCoordsFromPinPosition = function () {
+    let coords = {
+      x: pinMain.style.left,
+      y: pinMain.style.top
+    };
+
+    return coords;
+  };
+
   let getAddressFromPinPosition = function (yFromUpLeft, xFromUpLeft = pinMainWidth / 2) {
-    return `${parseInt(parseInt(pinMain.style.left, 10) + xFromUpLeft, 10)}, ${parseInt(parseInt(pinMain.style.top, 10) + yFromUpLeft, 10)}`;
+    const coords = getCoordsFromPinPosition();
+    return `${parseInt(parseInt(coords.x, 10) + xFromUpLeft, 10)}, ${parseInt(parseInt(coords.y, 10) + yFromUpLeft, 10)}`;
   };
 
 
@@ -36,15 +46,12 @@
     return document.querySelector(`main`).insertAdjacentElement(`afterbegin`, successBox);
   };
 
-
   let successMessage;
-
 
   let onClickRemoveSuccessMessage = function () {
     successMessage.remove();
     document.removeEventListener(`click`, onClickRemoveSuccessMessage);
   };
-
 
   let onEscPressRemoveSuccessMessage = function (evt) {
     if (evt.key === `Escape`) {
@@ -52,7 +59,6 @@
     }
     document.removeEventListener(`keydown`, onEscPressRemoveSuccessMessage);
   };
-
 
   let submitForm = function (cb) {
     successMessage = renderSuccessMessage();
@@ -71,6 +77,7 @@
   window.adForm = {
     changeFormAbility,
     getAddressFromPinPosition,
+    getCoordsFromPinPosition,
     submitForm
   };
 })();

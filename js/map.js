@@ -4,7 +4,9 @@
   const map = document.querySelector(`.map`);
   const pinsList = document.querySelector(`.map__pins`);
   const pinMain = document.querySelector(`.map__pin--main`);
+  const pinMainHeight = pinMain.offsetHeight;
   const adForm = document.querySelector(`.ad-form`);
+  const addressInput = adForm.querySelector(`input[name=address]`);
   const titleInput = adForm.querySelector(`input[name=title]`);
   const priceInput = adForm.querySelector(`input[name=price]`);
   const typeInput = adForm.querySelector(`select[name=type]`);
@@ -13,6 +15,10 @@
   const roomsInput = adForm.querySelector(`select[name=rooms]`);
   const capacityInput = adForm.querySelector(`select[name=capacity]`);
   const filtersForm = document.querySelector(`.map__filters`);
+
+  const PIN_TAIL = 26;
+
+  const startCoords = window.adForm.getCoordsFromPinPosition();
 
 
   let onLoad = function () {
@@ -40,6 +46,8 @@
     adForm.classList.remove(`ad-form--disabled`);
     window.adForm.changeFormAbility(adForm, true);
     window.adForm.changeFormAbility(filtersForm, true);
+
+    addressInput.value = window.adForm.getAddressFromPinPosition(pinMainHeight + PIN_TAIL);
 
     if (!pinsList.querySelector(`.map__pin:not(.map__pin--main)`)) {
       window.pin.renderPinsArray(window.filterData.cutData(window.backend.announcements));
@@ -73,6 +81,10 @@
     window.adForm.changeFormAbility(adForm, false);
     window.adForm.changeFormAbility(filtersForm, false);
     adForm.classList.add(`ad-form--disabled`);
+
+    pinMain.style.left = startCoords.x;
+    pinMain.style.top = startCoords.y;
+    addressInput.value = window.adForm.getAddressFromPinPosition(pinMainHeight / 2);
 
     for (let pin of pinsList.querySelectorAll(`.map__pin:not(.map__pin--main)`)) {
       pin.remove();
