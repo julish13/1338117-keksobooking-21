@@ -122,7 +122,7 @@
       activePin.classList.remove(`map__pin--active`);
     }
     cardPopup.remove();
-  }
+  };
 
 
   let onPopupEscPress = function (evt) {
