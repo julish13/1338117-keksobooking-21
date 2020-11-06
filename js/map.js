@@ -6,6 +6,7 @@
   const pinMain = document.querySelector(`.map__pin--main`);
   const pinMainHeight = pinMain.offsetHeight;
   const adForm = document.querySelector(`.ad-form`);
+  const adFormReset = adForm.querySelector(`.ad-form__reset`);
   const addressInput = adForm.querySelector(`input[name=address]`);
   const titleInput = adForm.querySelector(`input[name=title]`);
   const priceInput = adForm.querySelector(`input[name=price]`);
@@ -69,6 +70,7 @@
     pinMain.removeEventListener(`keydown`, onMainPinEnterPress);
 
     adForm.addEventListener(`submit`, onSubmitEvtListeners);
+    adFormReset.addEventListener(`click`, getInactive);
 
     filtersForm.addEventListener(`change`, window.filterData.onChangeFilter);
   };
