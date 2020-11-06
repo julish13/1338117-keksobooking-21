@@ -131,6 +131,7 @@
       if (cardPopup) {
         if (target) {
           cardPopup.remove();
+          pinsList.querySelector(`.map__pin--active`).classList.remove(`map__pin--active`);
         }
       }
 
@@ -142,6 +143,7 @@
         }
         document.addEventListener(`keydown`, onPopupEscPress);
         popupCloseButton.addEventListener(`click`, onClickClosePopup);
+        pinsListChildren[i].classList.add(`map__pin--active`);
       }
     }
   };
@@ -149,6 +151,7 @@
   let onClickClosePopup = function () {
     if (cardPopup) {
       cardPopup.remove();
+      pinsList.querySelector(`.map__pin--active`).classList.remove(`map__pin--active`);
 
       document.removeEventListener(`keydown`, onPopupEscPress);
       if (popupCloseButton) {
