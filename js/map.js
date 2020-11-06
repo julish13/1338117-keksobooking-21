@@ -23,7 +23,7 @@
 
 
   let onLoad = function () {
-    window.backend.load(onActivePage, window.backend.errorHandler);
+    window.backend.load(onActivePage, window.backend.errorHandlerLoad);
   };
 
   let onMainPinEnterPress = function (evt) {
@@ -119,7 +119,7 @@
 
   let onSubmitEvtListeners = function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(adForm), submitSuccessHandler, window.backend.errorHandler);
+    window.backend.save(new FormData(adForm), submitSuccessHandler, window.backend.errorHandlerSave);
   };
 
 

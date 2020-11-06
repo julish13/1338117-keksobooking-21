@@ -22,7 +22,7 @@
   };
 
 
-  let errorHandler = function (errorMessage) {
+  let errorHandlerTemplate = function (errorMessage, save) {
     const fragmentError = document.createDocumentFragment();
     let errorBox = createErrorBox(errorMessage);
     fragmentError.appendChild(errorBox);
@@ -32,8 +32,10 @@
       errorBox.remove();
       adForm.reset();
       errorButton.removeEventListener(`click`, errorBoxHandler);
-      document.removeEventListener(`click`, errorBoxHandler);
       document.removeEventListener(`keydown`, onEscPress);
+      if (save) {
+        document.removeEventListener(`click`, errorBoxHandler);
+      }
     };
 
     let onEscPress = function (evt) {
@@ -44,10 +46,20 @@
     };
 
     errorButton.addEventListener(`click`, errorBoxHandler);
-    document.addEventListener(`click`, errorBoxHandler);
     document.addEventListener(`keydown`, onEscPress);
-    document.querySelector(`main`).insertAdjacentElement(`afterbegin`, errorBox);
+    if (save) {
+      document.addEventListener(`click`, errorBoxHandler);
+    }
 
+    document.querySelector(`main`).insertAdjacentElement(`afterbegin`, errorBox);
+  };
+
+  let errorHandlerLoad = function (errorMessage) {
+    errorHandlerTemplate(errorMessage);
+  };
+
+  let errorHandlerSave = function (errorMessage) {
+    errorHandlerTemplate(errorMessage, save);
   };
 
 
@@ -93,7 +105,8 @@
   window.backend = {
     load,
     save,
-    errorHandler,
+    errorHandlerLoad,
+    errorHandlerSave,
     announcements,
     filteredAnnouncements
   };
