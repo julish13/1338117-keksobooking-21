@@ -10,7 +10,7 @@
   const successTemplate = document.querySelector(`#success`).content;
 
 
-  let changeFormAbility = function (form, ability) {
+  let changeAbility = function (form, ability) {
     const fieldsets = form.querySelectorAll(`fieldset`);
     const selects = form.querySelectorAll(`select`);
 
@@ -60,7 +60,7 @@
     document.removeEventListener(`keydown`, onEscPressRemoveSuccessMessage);
   };
 
-  let submitForm = function (cb) {
+  let submit = function (cb) {
     successMessage = renderSuccessMessage();
     cb();
 
@@ -69,15 +69,15 @@
   };
 
 
-  changeFormAbility(adForm, false);
-  changeFormAbility(filtersForm, false);
+  changeAbility(adForm, false);
+  changeAbility(filtersForm, false);
   addressInput.value = getAddressFromPinPosition(pinMainHeight / 2);
 
 
   window.adForm = {
-    changeFormAbility,
+    changeAbility,
     getAddressFromPinPosition,
     getCoordsFromPinPosition,
-    submitForm
+    submit
   };
 })();

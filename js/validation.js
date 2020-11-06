@@ -11,28 +11,28 @@
   const adForm = document.querySelector(`.ad-form`);
   const titleInput = adForm.querySelector(`input[name=title]`);
   const priceInput = adForm.querySelector(`input[name=price]`);
-  const typeInput = adForm.querySelector(`select[name=type]`);
-  const timeInInput = adForm.querySelector(`select[name=timein]`);
-  const timeOutInput = adForm.querySelector(`select[name=timeout]`);
-  const roomsInput = adForm.querySelector(`select[name=rooms]`);
-  const capacityInput = adForm.querySelector(`select[name=capacity]`);
+  const typeSelect = adForm.querySelector(`select[name=type]`);
+  const timeInSelect = adForm.querySelector(`select[name=timein]`);
+  const timeOutSelect = adForm.querySelector(`select[name=timeout]`);
+  const roomsSelect = adForm.querySelector(`select[name=rooms]`);
+  const capacitySelect = adForm.querySelector(`select[name=capacity]`);
 
 
   let onChangeMatchPriceToType = function () {
-    priceInput.min = priceInput.placeholder = PriceMinToType[typeInput.value];
+    priceInput.min = priceInput.placeholder = PriceMinToType[typeSelect.value];
   };
 
 
-  let onChangematchTimesOut = function () {
-    timeInInput.value = timeOutInput.value;
+  let onChangeMatchTimesOut = function () {
+    timeInSelect.value = timeOutSelect.value;
   };
 
-  let onChangematchTimesIn = function () {
-    timeOutInput.value = timeInInput.value;
+  let onChangeMatchTimesIn = function () {
+    timeOutSelect.value = timeInSelect.value;
   };
 
 
-  let onInputValidateTitle = function () {
+  let onInputCheckTitle = function () {
     if (titleInput.value.length < titleInput.minLength) {
       titleInput.setCustomValidity(`Заголовок должен состоять минимум из ${titleInput.minLength} символов`);
     } else if (titleInput.value.length > titleInput.maxLength) {
@@ -44,7 +44,8 @@
     titleInput.reportValidity();
   };
 
-  let onInputValidatePrice = function () {
+
+  let onInputCheckPrice = function () {
     if (+priceInput.value < priceInput.min) {
       priceInput.setCustomValidity(`Цена слишком маленькая`);
     } else if (+priceInput.value > priceInput.max) {
@@ -56,31 +57,32 @@
     priceInput.reportValidity();
   };
 
-  let onInputValidateRoomCapacity = function () {
-    if (+capacityInput.value === 0 && +roomsInput.value !== 100) {
-      roomsInput.setCustomValidity(`Нужно 100 комнат`);
-      capacityInput.setCustomValidity(``);
-    } else if (+capacityInput.value !== 0 && +roomsInput.value === 100) {
-      roomsInput.setCustomValidity(``);
-      capacityInput.setCustomValidity(`Не для гостей`);
-    } else if (+capacityInput.value > roomsInput.value) {
-      roomsInput.setCustomValidity(`Нужно больше комнат`);
-      capacityInput.setCustomValidity(``);
+
+  let onInputMatchRoomsToCapacity = function () {
+    if (+capacitySelect.value === 0 && +roomsSelect.value !== 100) {
+      roomsSelect.setCustomValidity(`Нужно 100 комнат`);
+      capacitySelect.setCustomValidity(``);
+    } else if (+capacitySelect.value !== 0 && +roomsSelect.value === 100) {
+      roomsSelect.setCustomValidity(``);
+      capacitySelect.setCustomValidity(`Не для гостей`);
+    } else if (+capacitySelect.value > roomsSelect.value) {
+      roomsSelect.setCustomValidity(`Нужно больше комнат`);
+      capacitySelect.setCustomValidity(``);
     } else {
-      roomsInput.setCustomValidity(``);
-      capacityInput.setCustomValidity(``);
+      roomsSelect.setCustomValidity(``);
+      capacitySelect.setCustomValidity(``);
     }
 
-    roomsInput.reportValidity();
-    capacityInput.reportValidity();
+    roomsSelect.reportValidity();
+    capacitySelect.reportValidity();
   };
 
   window.validation = {
     onChangeMatchPriceToType,
-    onChangematchTimesOut,
-    onChangematchTimesIn,
-    onInputValidateTitle,
-    onInputValidatePrice,
-    onInputValidateRoomCapacity
+    onChangeMatchTimesOut,
+    onChangeMatchTimesIn,
+    onInputCheckTitle,
+    onInputCheckPrice,
+    onInputMatchRoomsToCapacity
   };
 })();

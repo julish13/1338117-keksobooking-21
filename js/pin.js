@@ -16,7 +16,7 @@
   };
 
 
-  let renderPinsArray = function (data) {
+  window.renderPinsArray = function (data) {
     const fragment = document.createDocumentFragment();
 
     for (let i = 0; i < data.length; i++) {
@@ -24,10 +24,5 @@
     }
 
     pinsList.appendChild(fragment);
-  };
-
-
-  window.pin = {
-    renderPinsArray,
   };
 })();

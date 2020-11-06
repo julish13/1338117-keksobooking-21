@@ -13,6 +13,10 @@
   const mapFiltersContainer = document.querySelector(`.map__filters-container`);
   const pinsList = document.querySelector(`.map__pins`);
 
+  let cardPopup;
+  let popupCloseButton;
+
+
   let createCard = function (data) {
     const cardBox = cardTemplate.cloneNode(true);
 
@@ -105,8 +109,6 @@
     return cardBox;
   };
 
-  let cardPopup;
-  let popupCloseButton;
 
   let renderCard = function (data) {
     const fragmentCard = document.createDocumentFragment();

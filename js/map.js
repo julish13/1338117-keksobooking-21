@@ -5,17 +5,17 @@
   const pinsList = document.querySelector(`.map__pins`);
   const pinMain = document.querySelector(`.map__pin--main`);
   const pinMainHeight = pinMain.offsetHeight;
+  const filtersForm = document.querySelector(`.map__filters`);
   const adForm = document.querySelector(`.ad-form`);
   const adFormReset = adForm.querySelector(`.ad-form__reset`);
   const addressInput = adForm.querySelector(`input[name=address]`);
   const titleInput = adForm.querySelector(`input[name=title]`);
   const priceInput = adForm.querySelector(`input[name=price]`);
-  const typeInput = adForm.querySelector(`select[name=type]`);
-  const timeInInput = adForm.querySelector(`select[name=timein]`);
-  const timeOutInput = adForm.querySelector(`select[name=timeout]`);
-  const roomsInput = adForm.querySelector(`select[name=rooms]`);
-  const capacityInput = adForm.querySelector(`select[name=capacity]`);
-  const filtersForm = document.querySelector(`.map__filters`);
+  const typeSelect = adForm.querySelector(`select[name=type]`);
+  const timeInSelect = adForm.querySelector(`select[name=timein]`);
+  const timeOutSelect = adForm.querySelector(`select[name=timeout]`);
+  const roomsSelect = adForm.querySelector(`select[name=rooms]`);
+  const capacitySelect = adForm.querySelector(`select[name=capacity]`);
 
   const PIN_TAIL = 26;
 
@@ -23,7 +23,7 @@
 
 
   let onLoad = function () {
-    window.backend.load(onActivePage, window.backend.errorHandlerLoad);
+    window.backend.load(onActivePage, window.backend.onLoadError);
   };
 
   let onMainPinEnterPress = function (evt) {
@@ -45,22 +45,22 @@
 
     map.classList.remove(`map--faded`);
     adForm.classList.remove(`ad-form--disabled`);
-    window.adForm.changeFormAbility(adForm, true);
-    window.adForm.changeFormAbility(filtersForm, true);
+    window.adForm.changeAbility(adForm, true);
+    window.adForm.changeAbility(filtersForm, true);
 
     addressInput.value = window.adForm.getAddressFromPinPosition(pinMainHeight + PIN_TAIL);
 
     if (!pinsList.querySelector(`.map__pin:not(.map__pin--main)`)) {
-      window.pin.renderPinsArray(window.filterData.cutData(window.backend.announcements));
+      window.renderPinsArray(window.filterData.cutData(window.backend.announcements));
     }
 
-    typeInput.addEventListener(`change`, window.validation.onChangeMatchPriceToType);
-    timeInInput.addEventListener(`change`, window.validation.onChangematchTimesIn);
-    timeOutInput.addEventListener(`change`, window.validation.onChangematchTimesOut);
-    titleInput.addEventListener(`input`, window.validation.onInputValidateTitle);
-    priceInput.addEventListener(`input`, window.validation.onInputValidatePrice);
-    roomsInput.addEventListener(`input`, window.validation.onInputValidateRoomCapacity);
-    capacityInput.addEventListener(`input`, window.validation.onInputValidateRoomCapacity);
+    typeSelect.addEventListener(`change`, window.validation.onChangeMatchPriceToType);
+    timeInSelect.addEventListener(`change`, window.validation.onChangeMatchTimesIn);
+    timeOutSelect.addEventListener(`change`, window.validation.onChangeMatchTimesOut);
+    titleInput.addEventListener(`input`, window.validation.onInputCheckTitle);
+    priceInput.addEventListener(`input`, window.validation.onInputCheckPrice);
+    roomsSelect.addEventListener(`input`, window.validation.onInputMatchRoomsToCapacity);
+    capacitySelect.addEventListener(`input`, window.validation.onInputMatchRoomsToCapacity);
 
     map.addEventListener(`click`, window.card.onClickOpenPopup);
     map.addEventListener(`keydown`, window.card.onPinEnterPressOpenPopup);
@@ -72,7 +72,7 @@
     adForm.addEventListener(`submit`, onSubmitEvtListeners);
     adFormReset.addEventListener(`click`, getInactive);
 
-    filtersForm.addEventListener(`change`, window.filterData.onChangeFilter);
+    filtersForm.addEventListener(`change`, window.filterData.onChange);
   };
 
 
@@ -80,8 +80,8 @@
     map.classList.add(`map--faded`);
     adForm.reset();
     filtersForm.reset();
-    window.adForm.changeFormAbility(adForm, false);
-    window.adForm.changeFormAbility(filtersForm, false);
+    window.adForm.changeAbility(adForm, false);
+    window.adForm.changeAbility(filtersForm, false);
     adForm.classList.add(`ad-form--disabled`);
 
     pinMain.style.left = startCoords.x;
@@ -92,20 +92,20 @@
       pin.remove();
     }
 
-    typeInput.removeEventListener(`change`, window.validation.onChangeMatchPriceToType);
-    timeInInput.removeEventListener(`change`, window.validation.onChangematchTimesIn);
-    timeOutInput.removeEventListener(`change`, window.validation.onChangematchTimesOut);
-    titleInput.removeEventListener(`input`, window.validation.onInputValidateTitle);
-    priceInput.removeEventListener(`input`, window.validation.onInputValidatePrice);
-    roomsInput.removeEventListener(`input`, window.validation.onInputValidateRoomCapacity);
-    capacityInput.removeEventListener(`input`, window.validation.onInputValidateRoomCapacity);
+    typeSelect.removeEventListener(`change`, window.validation.onChangeMatchPriceToType);
+    timeInSelect.removeEventListener(`change`, window.validation.onChangeMatchTimesIn);
+    timeOutSelect.removeEventListener(`change`, window.validation.onChangeMatchTimesOut);
+    titleInput.removeEventListener(`input`, window.validation.onInputCheckTitle);
+    priceInput.removeEventListener(`input`, window.validation.onInputCheckPrice);
+    roomsSelect.removeEventListener(`input`, window.validation.onInputMatchRoomsToCapacity);
+    capacitySelect.removeEventListener(`input`, window.validation.onInputMatchRoomsToCapacity);
 
     map.removeEventListener(`click`, window.card.onClickOpenPopup);
     map.removeEventListener(`keydown`, window.card.onPinEnterPressOpenPopup);
 
     adForm.removeEventListener(`submit`, onSubmitEvtListeners);
 
-    filtersForm.removeEventListener(`change`, window.filterData.onChangeFilter);
+    filtersForm.removeEventListener(`change`, window.filterData.onChange);
 
     setListenersToPinMain();
 
@@ -113,18 +113,18 @@
   };
 
 
-  let submitSuccessHandler = function () {
-    window.adForm.submitForm(getInactive);
+  let onSubmitSuccess = function () {
+    window.adForm.submit(getInactive);
   };
 
   let onSubmitEvtListeners = function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(adForm), submitSuccessHandler, window.backend.errorHandlerSave);
+    window.backend.save(new FormData(adForm), onSubmitSuccess, window.backend.onSubmitError);
   };
 
 
   let setListenersToPinMain = function () {
-    pinMain.addEventListener(`mousedown`, window.move.onMovePin);
+    pinMain.addEventListener(`mousedown`, window.renderPinsArray);
 
     if (window.backend.announcements.length === 0) {
       pinMain.addEventListener(`mousedown`, onLoad);

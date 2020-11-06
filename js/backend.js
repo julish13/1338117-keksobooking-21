@@ -9,9 +9,11 @@
   };
   const TIMEOUT_IN_MS = 10000;
 
-
   const errorTemplate = document.querySelector(`#error`).content;
   const adForm = document.querySelector(`.ad-form`);
+
+  let announcements = [];
+  let filteredAnnouncements = [];
 
 
   let createErrorBox = function (errorMessage) {
@@ -22,44 +24,44 @@
   };
 
 
-  let errorHandlerTemplate = function (errorMessage, save) {
+  let onErrorTemplate = function (errorMessage, save) {
     const fragmentError = document.createDocumentFragment();
     let errorBox = createErrorBox(errorMessage);
     fragmentError.appendChild(errorBox);
     const errorButton = errorBox.querySelector(`.error__button`);
 
-    let errorBoxHandler = function () {
+    let onErrorButtonPress = function () {
       errorBox.remove();
       adForm.reset();
-      errorButton.removeEventListener(`click`, errorBoxHandler);
+      errorButton.removeEventListener(`click`, onErrorButtonPress);
       document.removeEventListener(`keydown`, onEscPress);
       if (save) {
-        document.removeEventListener(`click`, errorBoxHandler);
+        document.removeEventListener(`click`, onErrorButtonPress);
       }
     };
 
     let onEscPress = function (evt) {
       if (evt.key === `Escape`) {
         evt.preventDefault();
-        errorBoxHandler();
+        onErrorButtonPress();
       }
     };
 
-    errorButton.addEventListener(`click`, errorBoxHandler);
+    errorButton.addEventListener(`click`, onErrorButtonPress);
     document.addEventListener(`keydown`, onEscPress);
     if (save) {
-      document.addEventListener(`click`, errorBoxHandler);
+      document.addEventListener(`click`, onErrorButtonPress);
     }
 
     document.querySelector(`main`).insertAdjacentElement(`afterbegin`, errorBox);
   };
 
-  let errorHandlerLoad = function (errorMessage) {
-    errorHandlerTemplate(errorMessage);
+  let onLoadError = function (errorMessage) {
+    onErrorTemplate(errorMessage);
   };
 
-  let errorHandlerSave = function (errorMessage) {
-    errorHandlerTemplate(errorMessage, save);
+  let onSubmitError = function (errorMessage) {
+    onErrorTemplate(errorMessage, save);
   };
 
 
@@ -100,13 +102,11 @@
   };
 
 
-  let announcements = [];
-  let filteredAnnouncements = [];
   window.backend = {
     load,
     save,
-    errorHandlerLoad,
-    errorHandlerSave,
+    onLoadError,
+    onSubmitError,
     announcements,
     filteredAnnouncements
   };

@@ -18,7 +18,7 @@
   };
 
 
-  let onChangeFilter = window.debounce(function () {
+  let onChange = window.debounce(function () {
     window.card.onClickClosePopup();
     for (let pin of pinsList.querySelectorAll(`.map__pin:not(.map__pin--main)`)) {
       pin.remove();
@@ -68,11 +68,11 @@
     }
 
     window.backend.filteredAnnouncements = cutData(window.backend.filteredAnnouncements);
-    window.pin.renderPinsArray(window.backend.filteredAnnouncements);
+    window.renderPinsArray(window.backend.filteredAnnouncements);
   });
 
   window.filterData = {
     cutData,
-    onChangeFilter
+    onChange
   };
 })();
