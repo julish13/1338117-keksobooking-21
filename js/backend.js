@@ -27,12 +27,25 @@
     let errorBox = createErrorBox(errorMessage);
     fragmentError.appendChild(errorBox);
     const errorButton = errorBox.querySelector(`.error__button`);
+
     let errorBoxHandler = function () {
       errorBox.remove();
       adForm.reset();
       errorButton.removeEventListener(`click`, errorBoxHandler);
+      document.removeEventListener(`click`, errorBoxHandler);
+      document.removeEventListener(`keydown`, onEscPress);
     };
+
+    let onEscPress = function (evt) {
+      if (evt.key === `Escape`) {
+        evt.preventDefault();
+        errorBoxHandler();
+      }
+    };
+
     errorButton.addEventListener(`click`, errorBoxHandler);
+    document.addEventListener(`click`, errorBoxHandler);
+    document.addEventListener(`keydown`, onEscPress);
     document.querySelector(`main`).insertAdjacentElement(`afterbegin`, errorBox);
 
   };
