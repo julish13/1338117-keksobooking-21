@@ -7,6 +7,8 @@
   const priceSelect = filtersForm.querySelector(`select[name=housing-price]`);
   const roomsSelect = filtersForm.querySelector(`select[name=housing-rooms]`);
   const guestsSelect = filtersForm.querySelector(`select[name=housing-guests]`);
+  const featuresFieldset = filtersForm.querySelector(`.map__features`);
+  const featuresInputs = featuresFieldset.querySelectorAll(`input`);
 
   const PINS_AMOUNT = 5;
 
@@ -27,7 +29,7 @@
       window.backend.filteredAnnouncements = window.backend.filteredAnnouncements.filter(function (item) {
         return item.offer.type === typesSelect.value;
       });
-    };
+    }
 
     if (priceSelect.value !== `any`) {
       if (priceSelect.value === `low`) {
@@ -55,6 +57,14 @@
       window.backend.filteredAnnouncements = window.backend.filteredAnnouncements.filter(function (item) {
         return item.offer.guests === +guestsSelect.value;
       });
+    }
+
+    for (let feature of featuresInputs) {
+      if (feature.checked) {
+        window.backend.filteredAnnouncements = window.backend.filteredAnnouncements.filter(function (item) {
+          return item.offer.features.includes(feature.value);
+        });
+      }
     }
 
     window.backend.filteredAnnouncements = cutData(window.backend.filteredAnnouncements);

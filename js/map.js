@@ -14,8 +14,6 @@
   const capacityInput = adForm.querySelector(`select[name=capacity]`);
   const filtersForm = document.querySelector(`.map__filters`);
 
-  const typesSelect = filtersForm.querySelector(`select[name=housing-type]`);
-
 
   let onLoad = function () {
     window.backend.load(onActivePage, window.backend.errorHandler);
