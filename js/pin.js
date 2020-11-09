@@ -1,13 +1,13 @@
 'use strict';
 
 (function () {
-  const pinsList = document.querySelector(`.map__pins`);
-  const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-  const pinWidth = pinTemplate.offsetWidth;
-  const pinHeight = pinTemplate.offsetHeight;
+  const pinsListElement = document.querySelector(`.map__pins`);
+  const pinTemplateElement = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+  const pinWidth = pinTemplateElement.offsetWidth;
+  const pinHeight = pinTemplateElement.offsetHeight;
 
   let createPin = function (data) {
-    const pinBox = pinTemplate.cloneNode(true);
+    const pinBox = pinTemplateElement.cloneNode(true);
     const image = pinBox.querySelector(`img`);
     pinBox.style = `left: ${data.location.x - pinWidth / 2}px; top: ${data.location.y - pinHeight}px`;
     image.src = data.author.avatar;
@@ -23,6 +23,6 @@
       fragment.appendChild(createPin(data[i]));
     }
 
-    pinsList.appendChild(fragment);
+    pinsListElement.appendChild(fragment);
   };
 })();

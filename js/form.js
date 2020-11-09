@@ -1,33 +1,33 @@
 'use strict';
 
 (function () {
-  const pinMain = document.querySelector(`.map__pin--main`);
-  const pinMainWidth = pinMain.offsetWidth;
-  const pinMainHeight = pinMain.offsetHeight;
-  const adForm = document.querySelector(`.ad-form`);
-  const addressInput = adForm.querySelector(`input[name=address]`);
-  const filtersForm = document.querySelector(`.map__filters`);
-  const successTemplate = document.querySelector(`#success`).content;
+  const pinMainElement = document.querySelector(`.map__pin--main`);
+  const pinMainWidth = pinMainElement.offsetWidth;
+  const pinMainHeight = pinMainElement.offsetHeight;
+  const adFormElement = document.querySelector(`.ad-form`);
+  const addressInputElement = adFormElement.querySelector(`input[name=address]`);
+  const filtersFormElement = document.querySelector(`.map__filters`);
+  const successTemplateElement = document.querySelector(`#success`).content;
 
 
   let changeAbility = function (form, ability) {
-    const fieldsets = form.querySelectorAll(`fieldset`);
-    const selects = form.querySelectorAll(`select`);
+    const fieldsetsCollection = form.querySelectorAll(`fieldset`);
+    const selectsCollection = form.querySelectorAll(`select`);
 
-    for (let fieldset of fieldsets) {
+    fieldsetsCollection.forEach(function (fieldset) {
       fieldset.disabled = !ability;
-    }
+    });
 
-    for (let select of selects) {
+    selectsCollection.forEach(function (select) {
       select.disabled = !ability;
-    }
+    });
   };
 
 
   let getCoordsFromPinPosition = function () {
     let coords = {
-      x: pinMain.style.left,
-      y: pinMain.style.top
+      x: pinMainElement.style.left,
+      y: pinMainElement.style.top
     };
 
     return coords;
@@ -39,14 +39,14 @@
   };
 
 
+  let successMessage;
+
   let renderSuccessMessage = function () {
-    const successBox = successTemplate.querySelector(`.success`).cloneNode(true);
+    const successBox = successTemplateElement.querySelector(`.success`).cloneNode(true);
     const fragmentSuccess = document.createDocumentFragment();
     fragmentSuccess.appendChild(successBox);
     return document.querySelector(`main`).insertAdjacentElement(`afterbegin`, successBox);
   };
-
-  let successMessage;
 
   let onClickRemoveSuccessMessage = function () {
     successMessage.remove();
@@ -69,12 +69,12 @@
   };
 
 
-  changeAbility(adForm, false);
-  changeAbility(filtersForm, false);
-  addressInput.value = getAddressFromPinPosition(pinMainHeight / 2);
+  changeAbility(adFormElement, false);
+  changeAbility(filtersFormElement, false);
+  addressInputElement.value = getAddressFromPinPosition(pinMainHeight / 2);
 
 
-  window.adForm = {
+  window.form = {
     changeAbility,
     getAddressFromPinPosition,
     getCoordsFromPinPosition,

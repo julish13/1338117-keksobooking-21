@@ -9,15 +9,15 @@
   };
   const TIMEOUT_IN_MS = 10000;
 
-  const errorTemplate = document.querySelector(`#error`).content;
-  const adForm = document.querySelector(`.ad-form`);
+  const errorTemplateElement = document.querySelector(`#error`).content;
+  const adFormElement = document.querySelector(`.ad-form`);
 
   let announcements = [];
   let filteredAnnouncements = [];
 
 
   let createErrorBox = function (errorMessage) {
-    const errorBox = errorTemplate.querySelector(`.error`).cloneNode(true);
+    const errorBox = errorTemplateElement.querySelector(`.error`).cloneNode(true);
     const errorMessageBox = errorBox.querySelector(`.error__message`);
     errorMessageBox.textContent = errorMessage;
     return errorBox;
@@ -32,7 +32,7 @@
 
     let onErrorButtonPress = function () {
       errorBox.remove();
-      adForm.reset();
+      adFormElement.reset();
       errorButton.removeEventListener(`click`, onErrorButtonPress);
       document.removeEventListener(`keydown`, onEscPress);
       if (save) {
