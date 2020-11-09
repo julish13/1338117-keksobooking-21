@@ -33,8 +33,8 @@ let onChangeFilter = window.debounce(function () {
   let filteredAnnouncements = [];
 
   let checkFeatures = function (item) {
-    for (let i = 0; i < checkboxesCollection.length; i++) {
-      if (!item.offer.features.includes(checkboxesCollection[i].value)) {
+    for (let feature of checkboxesCollection) {
+      if (!item.offer.features.includes(feature.value)) {
         return false;
       }
     }
