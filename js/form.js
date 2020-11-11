@@ -37,7 +37,8 @@
 
   let getAddressFromPinPosition = (yFromUpLeft, xFromUpLeft = pinMainWidth / 2) => {
     const coords = getCoordsFromPinPosition();
-    return `${parseInt(parseInt(coords.x, 10) + xFromUpLeft, 10)}, ${parseInt(parseInt(coords.y, 10) + yFromUpLeft, 10)}`;
+    return `${parseInt(parseInt(coords.x, 10) + xFromUpLeft, 10)},
+    ${parseInt(parseInt(coords.y, 10) + yFromUpLeft, 10)}`;
   };
 
 

@@ -34,9 +34,11 @@
 
   let onInputCheckTitle = () => {
     if (titleInputElement.value.length < titleInputElement.minLength) {
-      titleInputElement.setCustomValidity(`Заголовок должен состоять минимум из ${titleInputElement.minLength} символов`);
+      titleInputElement.setCustomValidity
+      (`Заголовок должен состоять минимум из ${titleInputElement.minLength} символов`);
     } else if (titleInputElement.value.length > titleInputElement.maxLength) {
-      titleInputElement.setCustomValidity(`Заголовок не должен превышать ${titleInputElement.maxLength} символов`);
+      titleInputElement.setCustomValidity
+      (`Заголовок не должен превышать ${titleInputElement.maxLength} символов`);
     } else {
       titleInputElement.setCustomValidity(``);
     }

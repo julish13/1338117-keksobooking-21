@@ -46,10 +46,11 @@
     for (let i = 0; i < window.backend.adverts.length; i++) {
       let advertData = window.backend.adverts[i];
       if ((advertData.offer.type === typesSelectElement.value || typesSelectElement.value === ANY_CHOICE) &&
-      (priceSelectElement.value === ANY_CHOICE || convertPriceToString(advertData.offer.price) === priceSelectElement.value) &&
+      (priceSelectElement.value === ANY_CHOICE || convertPriceToString(advertData.offer.price)
+      === priceSelectElement.value) &&
       (roomsSelectElement.value === ANY_CHOICE || advertData.offer.rooms === +roomsSelectElement.value) &&
-      (guestsSelectElement.value === ANY_CHOICE || advertData.offer.guests === +guestsSelectElement.value)
-      && checkFeatures(advertData)) {
+      (guestsSelectElement.value === ANY_CHOICE || advertData.offer.guests === +guestsSelectElement.value) &&
+      checkFeatures(advertData)) {
         filteredAdverts.push(advertData);
       }
       if (filteredAdverts.length >= PINS_AMOUNT) {

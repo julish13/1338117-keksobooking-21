@@ -45,8 +45,10 @@
     }
   }
 
-  let createAdvertDataFieldToSelector = (advertData) => {
-    return {
+
+  let createCardBox = (advertData) => {
+    const cardBox = cardTemplateElement.cloneNode(true);
+    const advertDataFieldToSelector = {
       advertDataField: [
         advertData.offer.title,
         advertData.offer.address,
@@ -63,27 +65,29 @@
         `.popup__description`,
         `.popup__avatar`
       ]
-    }
-  }
-
-  let createCardBox = (advertData) => {
-    const cardBox = cardTemplateElement.cloneNode(true);
-    const advertDataFieldToSelector = createAdvertDataFieldToSelector(advertData);
-
+    };
 
     for (let i = 0; i < advertDataFieldToSelector.advertDataField.length; i++) {
-      checkField(cardBox, advertDataFieldToSelector.advertDataField[i], advertDataFieldToSelector.fieldSelector[i], () => {
-        fillCardBoxFields(cardBox, advertData, advertDataFieldToSelector.advertDataField[i], advertDataFieldToSelector.fieldSelector[i]);
+      checkField(cardBox,
+        advertDataFieldToSelector.advertDataField[i],
+        advertDataFieldToSelector.fieldSelector[i], () => {
+        fillCardBoxFields(cardBox,
+          advertData,
+          advertDataFieldToSelector.advertDataField[i],
+          advertDataFieldToSelector.fieldSelector[i]);
       })
     }
 
     checkField(cardBox, advertData.offer.rooms || advertData.offer.guests, `.popup__text--capacity`, () => {
       if (advertData.offer.rooms && advertData.offer.guests) {
-        cardBox.querySelector(`.popup__text--capacity`).textContent = `${advertData.offer.rooms} комнаты для ${advertData.offer.guests} гостей`;
+        cardBox.querySelector(`.popup__text--capacity`).textContent =
+        `${advertData.offer.rooms} комнаты для ${advertData.offer.guests} гостей`;
       } else if (!advertData.offer.guests) {
-        cardBox.querySelector(`.popup__text--capacity`).textContent = `${advertData.offer.rooms} комнаты`;
+        cardBox.querySelector(`.popup__text--capacity`).textContent =
+        `${advertData.offer.rooms} комнаты`;
       } else if (!advertData.offer.rooms) {
-        cardBox.querySelector(`.popup__text--capacity`).textContent = `для ${advertData.offer.guests} гостей`;
+        cardBox.querySelector(`.popup__text--capacity`).textContent =
+        `для ${advertData.offer.guests} гостей`;
       }
     })
 
@@ -106,7 +110,6 @@
         }
       }
     })
-
 
     checkField(cardBox, advertData.offer.photos, `.popup__photos`, () => {
       const cardPhotosListElement = cardBox.querySelector(`.popup__photos`);
