@@ -25,14 +25,14 @@ const onChangeFileChooser = (fileChooser, cb) => {
   const file = fileChooser.files[0];
   const fileType = file.type;
 
-  const matches = FILE_TYPES.some(function (type) {
+  const matches = FILE_TYPES.some((type) => {
     return fileType.endsWith(type);
   });
 
   if (matches) {
     const reader = new FileReader();
 
-    reader.addEventListener(`load`, function () {
+    reader.addEventListener(`load`, () => {
       cb(reader);
     });
 

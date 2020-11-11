@@ -16,7 +16,7 @@ const addressInputElement = adFormElement.querySelector(`input[name=address]`);
 
 
 const onMovePin = (evt) => {
-  const startCoords = {
+  let startCoords = {
     x: evt.clientX,
     y: evt.clientY
   };
