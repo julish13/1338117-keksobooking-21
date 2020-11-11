@@ -10,6 +10,7 @@ module.exports = {
     "./js/form.js",
     "./js/validation.js",
     "./js/filter.js",
+    "./js/upload.js",
     "./js/map.js"
   ],
   output: {
